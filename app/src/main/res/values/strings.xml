@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SocialMedia</string>
+    <string name="password_visible_content_description">Hide password</string>
+    <string name="password_hidden_content_description">Show password</string>
+    <string name="password_hint">Password</string>
+    <string name="username_hint">Email</string>
+    <string name="dont_have_an_account">Don\'t have account?</string>
+    <string name="sign_up">SIGN UP</string>
+</resources>
