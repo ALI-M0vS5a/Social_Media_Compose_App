@@ -1,6 +1,5 @@
 package com.example.socialmedia.presentation.onboarding
 
-import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -16,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,7 +77,7 @@ fun TopSection(
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = "Welcome To",
+        text = stringResource(id = R.string.welcome_to),
         color = Color(android.graphics.Color.parseColor("#000000")),
         fontWeight = FontWeight(400),
         fontSize = 16.sp,
@@ -86,7 +85,7 @@ fun TopSection(
         modifier = modifier
     )
     Text(
-        text = "OUR WORLD",
+        text = stringResource(id = R.string.our_world),
         color = Color(android.graphics.Color.parseColor("#000000")),
         fontWeight = FontWeight(250),
         fontSize = 36.sp,
@@ -182,7 +181,6 @@ fun GoForwardButton(
     navController: NavController
 ) {
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
     OutlinedButton(
         shape = CircleShape,
         border = BorderStroke(
@@ -215,7 +213,7 @@ fun GoForwardButton(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Go Forward",
+                text = stringResource(id = R.string.go_forward),
                 color = Color(android.graphics.Color.parseColor("#000000")),
                 fontWeight = FontWeight(400),
                 fontSize = 16.sp,
@@ -224,7 +222,7 @@ fun GoForwardButton(
             )
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_arrow_right_alt_24),
-                contentDescription = "Go Forward"
+                contentDescription = stringResource(id = R.string.go_forward)
             )
         }
     }
