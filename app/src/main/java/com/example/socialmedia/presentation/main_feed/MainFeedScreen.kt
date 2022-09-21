@@ -1,6 +1,6 @@
 package com.example.socialmedia.presentation.main_feed
 
-import androidx.compose.foundation.background
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -17,30 +17,26 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.socialmedia.R
 import com.example.socialmedia.presentation.components.Post
+import com.example.socialmedia.presentation.util.Screen
 
 @Composable
 fun MainFeedScreen(
     navController: NavController
 ) {
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(
-//                color = Color.White
-//            )
-//    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Spacer(modifier = Modifier.height(55.dp))
-            TopSection()
-            Spacer(modifier = Modifier.height(10.dp))
-            Post()
-
-        }
+    BackHandler {
+        navController.navigate(Screen.LoginScreen.route)
     }
-//}
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Spacer(modifier = Modifier.height(55.dp))
+        TopSection()
+        Spacer(modifier = Modifier.height(10.dp))
+        Post()
+
+    }
+}
 
 @Composable
 fun TopSection(

@@ -51,7 +51,10 @@ class MainActivity : ComponentActivity() {
                             Screen.FavoriteScreen.route,
                             Screen.ProfileScreen.route
                         ),
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        onFabClick = {
+                            navController.navigate(Screen.CreatePostScreen.route)
+                        }
                     ) {
                         Box(
                             modifier = Modifier

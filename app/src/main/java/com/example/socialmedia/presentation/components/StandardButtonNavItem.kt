@@ -1,5 +1,7 @@
 package com.example.socialmedia.presentation.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -23,7 +25,7 @@ import androidx.compose.ui.unit.sp
 @Throws(IllegalArgumentException::class)
 fun RowScope.StandardButtonNavItem(
     modifier: Modifier = Modifier,
-    icon: ImageVector,
+    icon: ImageVector? = null,
     contentDescription: String? = null,
     alertCount: Int? = null,
     selected: Boolean = false,
@@ -35,6 +37,12 @@ fun RowScope.StandardButtonNavItem(
     if (alertCount != null && alertCount < 0) {
         throw IllegalArgumentException("Alert count can't be null")
     }
+    val lineLength = animateFloatAsState(
+        targetValue = if(selected) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 800
+        )
+    )
     BottomNavigationItem(
         selected = selected,
         onClick = onClick,
@@ -46,25 +54,27 @@ fun RowScope.StandardButtonNavItem(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(8.dp)
+                    .padding(22.dp)
                     .drawBehind {
                         if (selected) {
                             drawLine(
                                 color = if (selected) selectedColor else unselectedColor,
-                                start = Offset(size.width / 2f - 15.dp.toPx(), size.height),
-                                end = Offset(size.width / 2f + 15.dp.toPx(), size.height),
+                                start = Offset(size.width / 2f - lineLength.value * 15.dp.toPx(), size.height),
+                                end = Offset(size.width / 2f + lineLength.value * 15.dp.toPx(), size.height),
                                 cap = StrokeCap.Round
                             )
                         }
                     }
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = contentDescription,
-                    modifier = Modifier
-                        .align(Alignment.Center),
-                    tint = if(selected) selectedColor else unselectedColor
-                )
+                if (icon != null) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = contentDescription,
+                        modifier = Modifier
+                            .align(Alignment.TopCenter),
+                        tint = if(selected) selectedColor else unselectedColor
+                    )
+                }
                 if (alertCount != null) {
                     val alertText = if (alertCount > 99) {
                         "99+"
@@ -76,7 +86,10 @@ fun RowScope.StandardButtonNavItem(
                         fontSize = 10.sp,
                         modifier = Modifier
                             .align(Alignment.TopCenter)
-                            .offset(10.dp)
+                            .offset(
+                                x = 10.dp,
+                                y = (-7).dp
+                            )
                             .size(15.dp)
                             .clip(CircleShape)
                             .background(

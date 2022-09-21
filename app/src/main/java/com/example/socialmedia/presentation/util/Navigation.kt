@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.socialmedia.presentation.chat.ChatScreen
+import com.example.socialmedia.presentation.create_post.CreatePostScreen
 import com.example.socialmedia.presentation.favorite.FavoriteScreen
 import com.example.socialmedia.presentation.login.LoginScreen
 import com.example.socialmedia.presentation.main_feed.MainFeedScreen
@@ -45,13 +46,22 @@ fun Navigation(
             )
         }
         composable(route = Screen.ChatScreen.route){
-            ChatScreen()
+            ChatScreen(
+                navController = navController
+            )
         }
         composable(route = Screen.FavoriteScreen.route){
-            FavoriteScreen()
+            FavoriteScreen(
+                navController = navController
+            )
         }
         composable(route = Screen.ProfileScreen.route){
-            ProfileScreen()
+            ProfileScreen(
+                navController = navController
+            )
+        }
+        composable(route = Screen.CreatePostScreen.route){
+            CreatePostScreen()
         }
     }
 }

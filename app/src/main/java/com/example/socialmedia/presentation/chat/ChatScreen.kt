@@ -1,19 +1,30 @@
 package com.example.socialmedia.presentation.chat
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
+import com.example.socialmedia.domain.models.BottomNavItem
+import com.example.socialmedia.presentation.util.Screen
 
 @Composable
-fun ChatScreen() {
+fun ChatScreen(
+    navController: NavController
+) {
+    BackHandler {
+        navController.navigate(Screen.MainFeedScreen.route)
+    }
     Box(modifier = Modifier.fillMaxSize()){
         Text(
             text = "Chat Screen",
             modifier = Modifier
-                .align(Alignment.Center)
+                .align(Alignment.Center),
+            color = Color.Black
         )
     }
 }

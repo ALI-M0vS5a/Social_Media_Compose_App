@@ -1,18 +1,25 @@
 package com.example.socialmedia.presentation.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.BottomAppBar
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Message
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.socialmedia.R
 import com.example.socialmedia.domain.models.BottomNavItem
@@ -24,6 +31,7 @@ fun StandardScaffold(
     modifier: Modifier = Modifier,
     navController: NavController,
     showBottomBar: Boolean = false,
+    onFabClick: () -> Unit = {},
     bottomNavItem: List<BottomNavItem> = listOf(
         BottomNavItem(
             route = Screen.MainFeedScreen.route,
@@ -37,8 +45,11 @@ fun StandardScaffold(
             contentDescription = stringResource(id = R.string.chat)
         ),
         BottomNavItem(
+            route = ""
+        ),
+        BottomNavItem(
             route = Screen.FavoriteScreen.route,
-            icon = Icons.Outlined.Favorite,
+            icon = Icons.Default.Favorite,
             contentDescription = stringResource(id = R.string.favorite)
         ),
         BottomNavItem(
@@ -52,24 +63,21 @@ fun StandardScaffold(
 ) {
     Scaffold(
         bottomBar = {
-            if(showBottomBar) {
-                BottomAppBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            shape = CircleShape,
-                            color = Color.Black
-                        ),
-                    backgroundColor = Color.White,
-                    cutoutShape = CircleShape
-                ) {
+            if (showBottomBar) {
+//                BottomAppBar(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .background(
+//                            shape = CircleShape,
+//                            color = Color.Black
+//                        ),
+//                    backgroundColor = MaterialTheme.colors.surface,
+//                    cutoutShape = CircleShape
+//                ) {
                     BottomNavigation(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(
-                                shape = CircleShape,
-                                color = Color.Black
-                            ),
+                            .height(82.88.dp),
                         backgroundColor = Color.White,
                         contentColor = Color.Transparent
                     ) {
@@ -79,14 +87,58 @@ fun StandardScaffold(
                                 contentDescription = bottomNavItem.contentDescription,
                                 selected = bottomNavItem.route == navController.currentDestination?.route,
                                 alertCount = bottomNavItem.alertCount,
+                                enabled = bottomNavItem.icon != null
                             ) {
-                                navController.navigate(bottomNavItem.route)
+                                if(navController.currentDestination?.route != bottomNavItem.route){
+                                    navController.navigate(bottomNavItem.route)
+                                }
                             }
                         }
                     }
                 }
+//            }
+        },
+        floatingActionButton = {
+            if(showBottomBar) {
+                FloatingActionButton(
+                    onClick = onFabClick,
+                    shape = RoundedCornerShape(40),
+                    backgroundColor = Color.Black,
+                    modifier = Modifier
+                        .size(
+                            width = 60.26.dp,
+                            height = 61.97.dp
+                        )
+                        .rotate(40f)
+                        .offset(
+                            x = 10.dp,
+                            y = 10.dp
+                        )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .border(
+                                width = 1.dp,
+                                color = Color.White,
+                                shape = CircleShape
+                            )
+                            .size(20.dp)
+
+
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = stringResource(id = R.string.add),
+                            tint = Color.White,
+                            modifier = Modifier
+                                .rotate(50f)
+                        )
+                    }
+                }
             }
         },
+        isFloatingActionButtonDocked = true,
+        floatingActionButtonPosition = FabPosition.Center,
         modifier = modifier
     ) {
         content(it)
