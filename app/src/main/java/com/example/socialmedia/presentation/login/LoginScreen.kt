@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Facebook
 import androidx.compose.material.icons.filled.Mail
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,19 +32,26 @@ import com.example.socialmedia.R
 import com.example.socialmedia.presentation.components.StandardButton
 import com.example.socialmedia.presentation.components.StandardTextField
 import com.example.socialmedia.presentation.util.Screen
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun LoginScreen(
     navController: NavController
 ) {
+    val systemUiController: SystemUiController = rememberSystemUiController()
+    LaunchedEffect(key1 = true){
+        systemUiController.setStatusBarColor(
+            color = Color(android.graphics.Color.parseColor("#C1CED6"))
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxSize()
                 .background(
                     color = Color(android.graphics.Color.parseColor("#C1CED6"))
                 )
@@ -57,7 +65,7 @@ fun LoginScreen(
                 letterSpacing = 10.sp,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 175.dp)
+                    .padding(top = 100.dp)
             )
             Box(
                 modifier = Modifier

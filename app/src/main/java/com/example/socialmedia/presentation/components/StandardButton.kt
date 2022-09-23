@@ -2,6 +2,7 @@ package com.example.socialmedia.presentation.components
 
 
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,12 +22,20 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun StandardButton(
     text: String = "",
+    backgroundColor: Color = Color(android.graphics.Color.parseColor("#8CDCE1")),
+    contentColor: Color = Color.White,
+    textColor: Color = Color.White,
+    borderColor: Color = Color.White,
     onClick: () -> Unit = {},
 ) {
     OutlinedButton(
+        border = BorderStroke(
+            width = 1.dp,
+            color = borderColor
+        ),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(android.graphics.Color.parseColor("#8CDCE1")),
-            contentColor = Color.White
+            backgroundColor = backgroundColor,
+            contentColor = contentColor
         ),
         shape = CircleShape,
         modifier = Modifier
@@ -42,7 +51,7 @@ fun StandardButton(
             fontSize = 16.sp,
             letterSpacing = 0.6.sp,
             lineHeight = 24.sp,
-            color = Color.White
+            color = textColor
         )
     }
 }

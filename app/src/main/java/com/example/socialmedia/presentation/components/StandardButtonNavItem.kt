@@ -56,12 +56,20 @@ fun RowScope.StandardButtonNavItem(
                     .fillMaxSize()
                     .padding(22.dp)
                     .drawBehind {
-                        if (selected) {
+                        if (lineLength.value > 0f) {
                             drawLine(
-                                color = if (selected) selectedColor else unselectedColor,
-                                start = Offset(size.width / 2f - lineLength.value * 15.dp.toPx(), size.height),
-                                end = Offset(size.width / 2f + lineLength.value * 15.dp.toPx(), size.height),
-                                cap = StrokeCap.Round
+                                color = if (selected) selectedColor
+                                else unselectedColor,
+                                start = Offset(
+                                    size.width / 2f - lineLength.value * 15.dp.toPx(),
+                                    size.height
+                                ),
+                                end = Offset(
+                                    size.width / 2f + lineLength.value * 15.dp.toPx(),
+                                    size.height
+                                ),
+                                cap = StrokeCap.Round,
+                                strokeWidth = 2.dp.toPx()
                             )
                         }
                     }

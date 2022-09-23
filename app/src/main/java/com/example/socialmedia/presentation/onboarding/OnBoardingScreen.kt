@@ -9,6 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
 
@@ -36,6 +39,12 @@ fun OnBoardingScreen(
     navController: NavController
 ) {
     val state = rememberPagerState()
+    val systemUiController: SystemUiController = rememberSystemUiController()
+    LaunchedEffect(key1 = true){
+        systemUiController.setStatusBarColor(
+            color = Color(android.graphics.Color.parseColor("#C1CED6"))
+        )
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()

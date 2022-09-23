@@ -25,7 +25,7 @@
     <string name="more_vert">more</string>
     <string name="unlike">unlike</string>
     <string name="like">like</string>
-    <string name="comment">comment</string>
+    <string name="comment_count">%dk</string>
     <string name="share">share</string>
     <string name="main_feed_title">OUR WORLD</string>
     <string name="activity">activity</string>
@@ -34,4 +34,22 @@
     <string name="favorite">favorite</string>
     <string name="person">person</string>
     <string name="add">Add</string>
+    <string name="arrow_back">Arrow Back</string>
+    <string name="your_feed">Feed</string>
+    <string name="search">Search</string>
+    <string name="upload">Upload</string>
+    <string name="comment">Comment</string>
+    <string name="like_count">%dk</string>
+    <string name="post_detail_image">PostDetailImage</string>
+    <string name="activity_settings">Activity Settings</string>
+    <string name="activity_title">Activity</string>
+    <string name="liked">liked</string>
+    <string name="commented_on">commented on</string>
+    <string name="your_post">your post</string>
+    <string name="profile_name">\@monicagamage</string>
+    <string name="profile_posts">POST</string>
+    <string name="profile_followers">FOLLOWERS</string>
+    <string name="profile_follower">FOLLOWS</string>
+    <string name="unfollow">UnFollow</string>
+    <string name="follow">Follow</string>
 </resources>

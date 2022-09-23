@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,41 +26,49 @@ import androidx.navigation.NavController
 import com.example.socialmedia.R
 import com.example.socialmedia.presentation.components.StandardButton
 import com.example.socialmedia.presentation.components.StandardTextField
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
 @Composable
 fun RegisterScreen(
     navController: NavController
 ) {
+    val systemUiController: SystemUiController = rememberSystemUiController()
+    LaunchedEffect(key1 = true){
+        systemUiController.setStatusBarColor(
+            color = Color(android.graphics.Color.parseColor("#C1CED6"))
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxSize()
                 .background(
                     color = Color(android.graphics.Color.parseColor("#C1CED6"))
                 )
+
         ) {
             Text(
                 text = stringResource(id = R.string.welcome),
-                color = androidx.compose.ui.graphics.Color.White,
+                color = Color.White,
                 fontWeight = FontWeight(700),
                 fontSize = 40.sp,
                 lineHeight = 48.72.sp,
                 letterSpacing = 10.sp,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 175.dp)
+                    .padding(top = 100.dp)
             )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(600.dp)
                     .background(
-                        color = androidx.compose.ui.graphics.Color.White,
+                        color = Color.White,
                         shape = CircleShape.copy(
                             topStart = CornerSize(35.dp),
                             topEnd = CornerSize(35.dp),

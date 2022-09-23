@@ -1,6 +1,6 @@
 package com.example.socialmedia.presentation.components
 
-import androidx.compose.foundation.background
+
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -9,13 +9,12 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Message
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -24,13 +23,15 @@ import androidx.navigation.NavController
 import com.example.socialmedia.R
 import com.example.socialmedia.domain.models.BottomNavItem
 import com.example.socialmedia.presentation.util.Screen
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
 @Composable
 fun StandardScaffold(
     modifier: Modifier = Modifier,
     navController: NavController,
-    showBottomBar: Boolean = false,
+    showBottomBar: Boolean = true,
     onFabClick: () -> Unit = {},
     bottomNavItem: List<BottomNavItem> = listOf(
         BottomNavItem(
@@ -64,42 +65,31 @@ fun StandardScaffold(
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
-//                BottomAppBar(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .background(
-//                            shape = CircleShape,
-//                            color = Color.Black
-//                        ),
-//                    backgroundColor = MaterialTheme.colors.surface,
-//                    cutoutShape = CircleShape
-//                ) {
-                    BottomNavigation(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(82.88.dp),
-                        backgroundColor = Color.White,
-                        contentColor = Color.Transparent
-                    ) {
-                        bottomNavItem.forEachIndexed { _, bottomNavItem ->
-                            StandardButtonNavItem(
-                                icon = bottomNavItem.icon,
-                                contentDescription = bottomNavItem.contentDescription,
-                                selected = bottomNavItem.route == navController.currentDestination?.route,
-                                alertCount = bottomNavItem.alertCount,
-                                enabled = bottomNavItem.icon != null
-                            ) {
-                                if(navController.currentDestination?.route != bottomNavItem.route){
-                                    navController.navigate(bottomNavItem.route)
-                                }
+                BottomNavigation(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(82.88.dp),
+                    backgroundColor = Color.White,
+                    contentColor = Color.Transparent
+                ) {
+                    bottomNavItem.forEachIndexed { _, bottomNavItem ->
+                        StandardButtonNavItem(
+                            icon = bottomNavItem.icon,
+                            contentDescription = bottomNavItem.contentDescription,
+                            selected = bottomNavItem.route == navController.currentDestination?.route,
+                            alertCount = bottomNavItem.alertCount,
+                            enabled = bottomNavItem.icon != null
+                        ) {
+                            if (navController.currentDestination?.route != bottomNavItem.route) {
+                                navController.navigate(bottomNavItem.route)
                             }
                         }
                     }
                 }
-//            }
+            }
         },
         floatingActionButton = {
-            if(showBottomBar) {
+            if (showBottomBar) {
                 FloatingActionButton(
                     onClick = onFabClick,
                     shape = RoundedCornerShape(40),

@@ -23,18 +23,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.socialmedia.R
+import com.example.socialmedia.domain.models.Post
 
 @Composable
-fun Post() {
+fun Post(
+    modifier: Modifier = Modifier,
+    post: Post,
+    showProfileImage: Boolean = true,
+    onPostClick: () -> Unit = {}
+
+) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(353.dp)
-            .padding(horizontal = 41.dp)
+        modifier = modifier
     ) {
         Image(
             painter = painterResource(id = R.drawable.post),
@@ -44,38 +48,49 @@ fun Post() {
                 .clip(RoundedCornerShape(26.dp)),
             contentScale = ContentScale.Crop
         )
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    color = Color.Transparent
+        if(showProfileImage){
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        color = Color.Transparent
+                    )
+                    .clickable {
+                        onPostClick()
+                    }
+            ) {
+                TopPostSection(
+                    modifier = Modifier
+                        .padding(15.dp),
+                    post = post,
+                    showProfileImage = showProfileImage
                 )
-        ) {
-            TopPostSection(
-                modifier = Modifier
-                    .padding(15.dp)
-            )
-            EngagementsButtonPostSection(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 15.dp),
-                onLikeClick = { isLiked ->
+                EngagementsButtonPostSection(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 15.dp),
+                    onLikeClick = { isLiked ->
 
-                },
-                onCommentClick = {
+                    },
+                    onCommentClick = {
 
-                },
-                onShareClick = {
+                    },
+                    onShareClick = {
 
-                }
-            )
+                    },
+                    post = post
+                )
+            }
         }
+
     }
 }
 
 @Composable
 fun TopPostSection(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    post: Post,
+    showProfileImage: Boolean
 ) {
     Row(
         modifier = modifier
@@ -84,10 +99,11 @@ fun TopPostSection(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ProfileImageAndTitle(
-            username = stringResource(id = R.string.profile_pic_name),
             onUsernameClick = { username ->
 
-            }
+            },
+            post = post,
+            showProfileImage = showProfileImage
         )
         Icon(
             imageVector = Icons.Filled.MoreVert,
@@ -100,8 +116,9 @@ fun TopPostSection(
 @Composable
 fun ProfileImageAndTitle(
     modifier: Modifier = Modifier,
-    username: String,
-    onUsernameClick: (String) -> Unit = {}
+    onUsernameClick: (String) -> Unit = {},
+    showProfileImage: Boolean,
+    post: Post
 ) {
     Row(
         modifier = modifier,
@@ -115,16 +132,18 @@ fun ProfileImageAndTitle(
                     color = Color(android.graphics.Color.parseColor("#8CDCE1"))
                 )
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.profile_pic),
-                contentDescription = stringResource(id = R.string.profile_pic),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(42.dp)
-                    .align(Alignment.Center)
+            if(showProfileImage){
+                Image(
+                    painter = painterResource(id = R.drawable.profile_pic),
+                    contentDescription = stringResource(id = R.string.profile_pic),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(42.dp)
+                        .align(Alignment.Center)
 
-            )
+                )
+            }
         }
         Spacer(modifier = Modifier.width(9.dp))
         Column(
@@ -132,7 +151,7 @@ fun ProfileImageAndTitle(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = username,
+                text = post.username,
                 fontWeight = FontWeight(400),
                 lineHeight = 18.sp,
                 fontSize = 12.sp,
@@ -162,7 +181,8 @@ fun EngagementsButtonPostSection(
     isLiked: Boolean = false,
     onLikeClick: (Boolean) -> Unit = {},
     onCommentClick: () -> Unit = {},
-    onShareClick: () -> Unit = {}
+    onShareClick: () -> Unit = {},
+    post: Post
 ) {
     Row(
         modifier = modifier
@@ -205,7 +225,10 @@ fun EngagementsButtonPostSection(
                     }
                 )
                 Text(
-                    text = "5.23k",
+                    text = stringResource(
+                        id = R.string.like_count,
+                        post.likeCount
+                    ),
                     fontWeight = FontWeight(400),
                     fontSize = 12.sp,
                     lineHeight = 18.sp,
@@ -240,7 +263,10 @@ fun EngagementsButtonPostSection(
                     tint = Color.Black
                 )
                 Text(
-                    text = "5.23k",
+                    text = stringResource(
+                        id = R.string.comment_count,
+                        post.commentCount
+                    ),
                     fontWeight = FontWeight(400),
                     fontSize = 12.sp,
                     lineHeight = 18.sp,
@@ -289,8 +315,8 @@ fun EngagementsButtonPostSection(
     }
 }
 
-@Preview
-@Composable
-fun PostPreview() {
-    Post()
-}
+//@Preview
+//@Composable
+//fun PostPreview() {
+//    Post()
+//}
