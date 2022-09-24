@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                         showBottomBar = navBackStackEntry?.destination?.route in listOf(
                             Screen.MainFeedScreen.route,
                             Screen.ChatScreen.route,
-                            Screen.FavoriteScreen.route,
+                            Screen.SearchScreen.route,
                             Screen.ProfileScreen.route
                         ),
                         modifier = Modifier.fillMaxSize(),

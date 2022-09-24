@@ -18,7 +18,7 @@
     <string name="email_hint">Email</string>
     <string name="sign_in">SIGN IN</string>
     <string name="already_have_an_account">Already have account?</string>
-    <string name="post">post</string>
+    <string name="post">Post</string>
     <string name="profile_pic">profile_pic</string>
     <string name="profile_pic_name">Monica Gamage</string>
     <string name="profile_pic_time">2 hours ago</string>
@@ -60,4 +60,7 @@
     <string name="linkedin">LinkedIn Profile URL</string>
     <string name="instagram">Instagram Profile URL</string>
     <string name="select">Select your top 3 skills</string>
+    <string name="menu">Menu</string>
+    <string name="add_post">Add Post</string>
+    <string name="description">Description</string>
 </resources>

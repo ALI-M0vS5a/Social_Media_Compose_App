@@ -3,22 +3,20 @@ package com.example.socialmedia.presentation.util
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.constraintlayout.compose.ExperimentalMotionApi
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.socialmedia.presentation.activity.ActivityScreen
 import com.example.socialmedia.presentation.chat.ChatScreen
 import com.example.socialmedia.presentation.create_post.CreatePostScreen
 import com.example.socialmedia.presentation.edit.EditProfileScreen
-import com.example.socialmedia.presentation.favorite.FavoriteScreen
 import com.example.socialmedia.presentation.login.LoginScreen
 import com.example.socialmedia.presentation.main_feed.MainFeedScreen
 import com.example.socialmedia.presentation.onboarding.OnBoardingScreen
 import com.example.socialmedia.presentation.post_detail.PostDetailScreen
 import com.example.socialmedia.presentation.profile.ProfileScreen
 import com.example.socialmedia.presentation.register.RegisterScreen
+import com.example.socialmedia.presentation.search.SearchScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 @ExperimentalMotionApi
@@ -30,7 +28,7 @@ fun Navigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.OnBoardingScreen.route
+        startDestination = Screen.SearchScreen.route
     ){
         composable(route = Screen.OnBoardingScreen.route){
             OnBoardingScreen(
@@ -57,8 +55,8 @@ fun Navigation(
                 navController = navController
             )
         }
-        composable(route = Screen.FavoriteScreen.route){
-            FavoriteScreen(
+        composable(route = Screen.SearchScreen.route){
+            SearchScreen(
                 navController = navController
             )
         }

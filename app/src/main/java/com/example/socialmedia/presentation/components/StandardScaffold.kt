@@ -49,7 +49,7 @@ fun StandardScaffold(
             route = ""
         ),
         BottomNavItem(
-            route = Screen.FavoriteScreen.route,
+            route = Screen.SearchScreen.route,
             icon = Icons.Default.Favorite,
             contentDescription = stringResource(id = R.string.favorite)
         ),
