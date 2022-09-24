@@ -52,4 +52,12 @@
     <string name="profile_follower">FOLLOWS</string>
     <string name="unfollow">UnFollow</string>
     <string name="follow">Follow</string>
+    <string name="camera_edit_profile">Camera Edit Profile</string>
+    <string name="your_bio">your Bio</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="github">GitHub Profile URL</string>
+    <string name="linkedin">LinkedIn Profile URL</string>
+    <string name="instagram">Instagram Profile URL</string>
+    <string name="select">Select your top 3 skills</string>
 </resources>

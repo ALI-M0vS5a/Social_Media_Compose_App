@@ -18,7 +18,8 @@ fun ProfileStats(
     modifier: Modifier = Modifier,
     isFollowing: Boolean = true,
     isOwnProfile: Boolean = true,
-    onFollowClick: () -> Unit = {}
+    onFollowClick: () -> Unit = {},
+    onEditButtonClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -44,7 +45,7 @@ fun ProfileStats(
                 text = stringResource(id = R.string.profile_follower)
             )
         }
-        if (isOwnProfile) {
+        if (!isOwnProfile) {
             Spacer(modifier = Modifier.height(10.dp))
             StandardButton(
                 borderColor = Color.Black,
@@ -65,6 +66,18 @@ fun ProfileStats(
                 } else {
                     stringResource(id = R.string.follow)
                 }
+            )
+        } else {
+            Spacer(modifier = Modifier.height(10.dp))
+            StandardButton(
+                borderColor = Color.Black,
+                backgroundColor = Color.LightGray,
+                textColor = Color.White,
+                contentColor = Color.Black,
+                onClick = {
+                    onEditButtonClick()
+                },
+                text = stringResource(id = R.string.edit_profile)
             )
         }
     }

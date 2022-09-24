@@ -2,6 +2,7 @@ package com.example.socialmedia.presentation.util
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.socialmedia.presentation.activity.ActivityScreen
 import com.example.socialmedia.presentation.chat.ChatScreen
 import com.example.socialmedia.presentation.create_post.CreatePostScreen
+import com.example.socialmedia.presentation.edit.EditProfileScreen
 import com.example.socialmedia.presentation.favorite.FavoriteScreen
 import com.example.socialmedia.presentation.login.LoginScreen
 import com.example.socialmedia.presentation.main_feed.MainFeedScreen
@@ -19,6 +21,7 @@ import com.example.socialmedia.presentation.profile.ProfileScreen
 import com.example.socialmedia.presentation.register.RegisterScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
+@ExperimentalMotionApi
 @ExperimentalMaterial3Api
 @ExperimentalPagerApi
 @Composable
@@ -76,6 +79,11 @@ fun Navigation(
         }
         composable(route = Screen.ActivityScreen.route){
             ActivityScreen(
+                navController = navController
+            )
+        }
+        composable(route = Screen.EditProfileScreen.route){
+            EditProfileScreen(
                 navController = navController
             )
         }

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun StandardButton(
+    modifier: Modifier = Modifier,
     text: String = "",
     backgroundColor: Color = Color(android.graphics.Color.parseColor("#8CDCE1")),
     contentColor: Color = Color.White,
@@ -38,7 +39,7 @@ fun StandardButton(
             contentColor = contentColor
         ),
         shape = CircleShape,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(52.dp)
             .padding(horizontal = 30.dp),

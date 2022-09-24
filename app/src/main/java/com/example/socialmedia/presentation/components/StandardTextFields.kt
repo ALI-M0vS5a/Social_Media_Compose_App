@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.socialmedia.R
@@ -36,7 +38,10 @@ fun StandardTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     onValueChange: (String) -> Unit,
     maxLength: Int = 40,
+    maxLine: Int = 1,
     showPasswordToggle: Boolean = false,
+    singleLine: Boolean = true,
+    leadingIcon: ImageVector? = null,
     onPasswordToggleClicked: (Boolean) -> Unit = {}
 
 ) {
@@ -70,8 +75,8 @@ fun StandardTextField(
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType
             ),
-            trailingIcon = {
-                if (isPasswordToggleDisplayed) {
+            trailingIcon = if (isPasswordToggleDisplayed) {
+                val icon: @Composable () -> Unit = {
                     IconButton(
                         onClick = {
                             onPasswordToggleClicked(!showPasswordToggle)
@@ -95,9 +100,20 @@ fun StandardTextField(
                         )
                     }
                 }
-            },
+                icon
+            } else null,
+            leadingIcon = if(leadingIcon != null){
+                val icon: @Composable () -> Unit = {
+                    Icon(
+                        imageVector = leadingIcon,
+                        contentDescription = null,
+                        tint = Color.Black
+                    )
+                }
+                icon
+            } else null,
             shape = CircleShape,
-            singleLine = true,
+            singleLine = singleLine,
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color(android.graphics.Color.parseColor("#F3F5F7")),
                 trailingIconColor = Color.Black,
@@ -114,9 +130,10 @@ fun StandardTextField(
                 .semantics {
                     testTag = TestTags.STANDARD_TEXT_FIELD
                 }
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            maxLines = maxLine
         )
-        if(error.isNotEmpty()) {
+        if (error.isNotEmpty()) {
             Text(
                 text = error,
                 color = MaterialTheme.colors.error,
