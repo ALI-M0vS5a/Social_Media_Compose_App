@@ -34,7 +34,7 @@ fun StandardTextField(
     modifier: Modifier = Modifier,
     text: String = "",
     hint: String = "",
-    error: String = "",
+    error: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     onValueChange: (String) -> Unit,
     maxLength: Int = 40,
@@ -42,7 +42,8 @@ fun StandardTextField(
     showPasswordToggle: Boolean = false,
     singleLine: Boolean = true,
     leadingIcon: ImageVector? = null,
-    onPasswordToggleClicked: (Boolean) -> Unit = {}
+    onPasswordToggleClicked: (Boolean) -> Unit = {},
+    errorText: @Composable () -> Unit = {}
 
 ) {
     val isPasswordToggleDisplayed by remember {
@@ -71,7 +72,7 @@ fun StandardTextField(
                     color = Color(android.graphics.Color.parseColor("#BDBDBD"))
                 )
             },
-            isError = error != "",
+            isError = error,
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType
             ),
@@ -133,14 +134,8 @@ fun StandardTextField(
                 .fillMaxWidth(),
             maxLines = maxLine
         )
-        if (error.isNotEmpty()) {
-            Text(
-                text = error,
-                color = MaterialTheme.colors.error,
-                textAlign = TextAlign.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
+        if (error) {
+            errorText()
         }
     }
 }

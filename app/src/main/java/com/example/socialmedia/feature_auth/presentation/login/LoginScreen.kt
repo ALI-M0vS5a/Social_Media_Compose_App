@@ -1,4 +1,4 @@
-package com.example.socialmedia.presentation.login
+package com.example.socialmedia.feature_auth.presentation.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -141,7 +141,6 @@ fun EmailAndPassword(
             viewModel.setUsernameText(it)
         },
         text = viewModel.uiState.value.usernameText,
-        error = viewModel.uiState.value.usernameError,
         hint = stringResource(id = R.string.username_hint)
     )
     Spacer(modifier = modifier.height(20.dp))

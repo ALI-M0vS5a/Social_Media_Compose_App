@@ -1,4 +1,4 @@
-package com.example.socialmedia.presentation.register
+package com.example.socialmedia.feature_auth.presentation.login
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -8,18 +8,12 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(
+class LoginViewModel @Inject constructor(
 
 ) : ViewModel() {
 
-    private val _uiState = mutableStateOf(RegisterScreenState())
-    val uiState: State<RegisterScreenState> = _uiState
-
-    fun setEmailText(email: String){
-        _uiState.value = uiState.value.copy(
-            emailText = email
-        )
-    }
+    private val _uiState = mutableStateOf(LoginScreenState())
+    val uiState: State<LoginScreenState> = _uiState
 
     fun setUsernameText(username: String) {
         _uiState.value = uiState.value.copy(
@@ -39,12 +33,6 @@ class RegisterViewModel @Inject constructor(
         )
     }
 
-    fun setIsEmailError(error: String){
-        _uiState.value = uiState.value.copy(
-            emailError = error
-        )
-    }
-
     fun setIsUsernameError(error: String){
         _uiState.value = uiState.value.copy(
             usernameError = error
@@ -55,5 +43,4 @@ class RegisterViewModel @Inject constructor(
             passwordError = error
         )
     }
-
 }

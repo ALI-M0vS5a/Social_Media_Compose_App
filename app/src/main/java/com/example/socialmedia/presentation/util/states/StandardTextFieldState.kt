@@ -1,4 +1,4 @@
-package com.example.socialmedia.presentation.util
+package com.example.socialmedia.presentation.util.states
 
 
 data class StandardTextFieldState(

@@ -6,11 +6,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Description
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -26,7 +24,7 @@ import com.example.socialmedia.presentation.components.StandardButton
 import com.example.socialmedia.presentation.components.StandardTextField
 import com.example.socialmedia.presentation.components.StandardTopBar
 import com.example.socialmedia.presentation.util.Screen
-import com.example.socialmedia.presentation.util.StandardTextFieldState
+import com.example.socialmedia.presentation.util.states.StandardTextFieldState
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -93,7 +91,6 @@ fun CreatePostScreen(
                         )
                     )
             },
-            error = viewModel.description.value.error,
             singleLine = false,
             maxLine = 3,
             modifier = Modifier
