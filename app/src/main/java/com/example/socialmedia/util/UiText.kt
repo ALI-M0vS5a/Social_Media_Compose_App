@@ -1,9 +1,10 @@
-package com.example.socialmedia.feature_auth
+package com.example.socialmedia.util
 
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.example.socialmedia.R
 
 
 sealed class UiText {
@@ -25,6 +26,11 @@ sealed class UiText {
         return when(this) {
             is DynamicString -> value
             is StringResource -> context.getString(resId, *args)
+        }
+    }
+    companion object {
+        fun unknownError(): UiText {
+            return StringResource(R.string.unknown_error)
         }
     }
 }

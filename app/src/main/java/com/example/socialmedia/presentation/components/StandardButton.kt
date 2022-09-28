@@ -28,6 +28,7 @@ fun StandardButton(
     textColor: Color = Color.White,
     borderColor: Color = Color.White,
     onClick: () -> Unit = {},
+    enabled: Boolean = true
 ) {
     OutlinedButton(
         border = BorderStroke(
@@ -38,6 +39,7 @@ fun StandardButton(
             backgroundColor = backgroundColor,
             contentColor = contentColor
         ),
+        enabled = enabled,
         shape = CircleShape,
         modifier = modifier
             .fillMaxWidth()

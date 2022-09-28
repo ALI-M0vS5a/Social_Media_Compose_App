@@ -1,6 +1,6 @@
 package com.example.socialmedia.feature_auth.domain.use_case
 
-import com.example.socialmedia.feature_auth.UiText
+import com.example.socialmedia.util.UiText
 
 
 data class ValidationResult(

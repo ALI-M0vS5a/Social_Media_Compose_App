@@ -2,7 +2,7 @@ package com.example.socialmedia.feature_auth.domain.use_case
 
 import android.util.Patterns
 import com.example.socialmedia.R
-import com.example.socialmedia.feature_auth.UiText
+import com.example.socialmedia.util.UiText
 
 class ValidateEmail {
     fun execute(email: String): ValidationResult {

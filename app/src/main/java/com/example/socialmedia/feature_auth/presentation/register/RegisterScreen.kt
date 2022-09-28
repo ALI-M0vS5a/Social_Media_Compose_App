@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -29,9 +30,9 @@ import androidx.navigation.NavController
 import com.example.socialmedia.R
 import com.example.socialmedia.presentation.components.StandardButton
 import com.example.socialmedia.presentation.components.StandardTextField
-import com.example.socialmedia.util.Constants
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
@@ -47,12 +48,12 @@ fun RegisterScreen(
         )
     }
     LaunchedEffect(key1 = context) {
-        viewModel.validationEvents.collect { event ->
+        viewModel.eventFlow.collectLatest { event ->
             when(event) {
-                is RegisterViewModel.ValidationEvent.Success -> {
+                is RegisterViewModel.UiEvent.Success -> {
                     Toast.makeText(
                         context,
-                        "Success",
+                        event.uiText.asString(context),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -109,10 +110,16 @@ fun RegisterScreen(
                         text = stringResource(id = R.string.sign_in),
                         onClick = {
                             viewModel.onEvent(Events.Register)
-                        }
+                        },
+                        enabled = !viewModel.state.isLoading
                     )
                     Spacer(modifier = Modifier.height(40.dp))
                     TextAlready(navController = navController)
+                    if(viewModel.state.isLoading){
+                        CircularProgressIndicator(
+                            color = Color(android.graphics.Color.parseColor("#8CDCE1"))
+                        )
+                    }
                 }
             }
         }

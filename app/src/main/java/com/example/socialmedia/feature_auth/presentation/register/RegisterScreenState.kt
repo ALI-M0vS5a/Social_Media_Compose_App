@@ -1,6 +1,6 @@
 package com.example.socialmedia.feature_auth.presentation.register
 
-import com.example.socialmedia.feature_auth.UiText
+import com.example.socialmedia.util.UiText
 
 
 data class RegisterScreenState(
@@ -10,20 +10,6 @@ data class RegisterScreenState(
     val showPassword: Boolean = false,
     val usernameError: UiText? = null,
     val emailError: UiText? = null,
-    val passwordError: UiText? = null
-) {
-    sealed class UsernameError {
-        object FieldEmpty: UsernameError()
-        object InputTooShort: UsernameError()
-    }
-    sealed class EmailError {
-        object FieldEmpty: EmailError()
-        object InvalidEmail: EmailError()
-    }
-    sealed class PasswordError {
-        object FieldEmpty: PasswordError()
-        object InvalidPassword: PasswordError()
-        object InputTooShort: PasswordError()
-    }
-
-}
+    val passwordError: UiText? = null,
+    var isLoading: Boolean = false
+)
