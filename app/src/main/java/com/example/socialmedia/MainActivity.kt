@@ -1,6 +1,8 @@
 package com.example.socialmedia
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -11,6 +13,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +28,7 @@ import com.example.socialmedia.presentation.util.Navigation
 import com.example.socialmedia.presentation.util.Screen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @ExperimentalMotionApi
 @ExperimentalMaterial3Api
@@ -32,6 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
+    private var backPressed = 0L
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen().apply {
@@ -47,6 +52,20 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    LaunchedEffect(key1 = true) {
+                        viewModel.eventFlow.collectLatest { events ->
+                            when(events) {
+                                is MainViewModel.UiEvent.Navigate -> {
+                                    navController.navigate(Screen.MainFeedScreen.route)
+                                    println("navigate from main")
+
+                                }
+                                is MainViewModel.UiEvent.Message -> {
+                                    println("error from main")
+                                }
+                            }
+                        }
+                    }
                     StandardScaffold(
                         navController = navController,
                         showBottomBar = navBackStackEntry?.destination?.route in listOf(
@@ -68,7 +87,8 @@ class MainActivity : ComponentActivity() {
                                 )
                         ) {
                             Navigation(
-                                navController = navController
+                                navController = navController,
+                                finish = finish
                             )
                         }
                     }
@@ -76,6 +96,20 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private val finish: () -> Unit = {
+        if(backPressed + 3000 > System.currentTimeMillis()) {
+            finish()
+        } else {
+            Toast.makeText(
+                this,
+                "Press again to exit",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        backPressed = System.currentTimeMillis()
+    }
+
 }
 
 @Preview(showBackground = true)

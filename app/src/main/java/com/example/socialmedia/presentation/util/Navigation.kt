@@ -24,7 +24,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 @ExperimentalPagerApi
 @Composable
 fun Navigation(
-    navController: NavHostController
+    navController: NavHostController,
+    finish: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -47,7 +48,10 @@ fun Navigation(
         }
         composable(route = Screen.MainFeedScreen.route){
             MainFeedScreen(
-                navController = navController
+                navController = navController,
+                finish = {
+                    finish()
+                }
             )
         }
         composable(route = Screen.ChatScreen.route){

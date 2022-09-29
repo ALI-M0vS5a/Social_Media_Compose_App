@@ -73,4 +73,5 @@
     <string name="unknown_error">Unknown error</string>
     <string name="success_registration">Successfully registered an account. You can login now.</string>
     <string name="success_login">Login Successfull</string>
+    <string name="not_authenticated">You are not authenticated</string>
 </resources>

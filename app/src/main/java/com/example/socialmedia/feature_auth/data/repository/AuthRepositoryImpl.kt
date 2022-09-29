@@ -92,4 +92,23 @@ class AuthRepositoryImpl(
             )
         }
     }
+
+    override suspend fun authenticate(): SimpleResource {
+        return try {
+            api.authenticate()
+            Resource.Success(Unit)
+        } catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
+    }
 }

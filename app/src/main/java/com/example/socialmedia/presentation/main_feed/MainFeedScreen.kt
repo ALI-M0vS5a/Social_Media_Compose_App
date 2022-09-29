@@ -28,8 +28,10 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @ExperimentalMaterial3Api
 @Composable
 fun MainFeedScreen(
-    navController: NavController
+    navController: NavController,
+    finish: () -> Unit
 ) {
+
     val systemUiController: SystemUiController = rememberSystemUiController()
     LaunchedEffect(key1 = true) {
         systemUiController.setStatusBarColor(
@@ -37,7 +39,7 @@ fun MainFeedScreen(
         )
     }
     BackHandler {
-        navController.navigate(Screen.LoginScreen.route)
+        finish()
     }
     Column(
         modifier = Modifier
