@@ -1,9 +1,11 @@
 package com.example.socialmedia.feature_auth.domain.di
 
+import android.content.SharedPreferences
 import com.example.socialmedia.feature_auth.data.remote.AuthApi
 import com.example.socialmedia.feature_auth.data.remote.AuthApi.Companion.BASE_URL
 import com.example.socialmedia.feature_auth.data.repository.AuthRepositoryImpl
 import com.example.socialmedia.feature_auth.domain.repository.AuthRepository
+import com.example.socialmedia.feature_auth.domain.use_case.LoginUseCase
 import com.example.socialmedia.feature_auth.domain.use_case.RegisterUseCase
 import dagger.Module
 import dagger.Provides
@@ -28,10 +30,11 @@ object AuthModule {
             .create(AuthApi::class.java)
     }
 
+
     @Provides
     @Singleton
-    fun provideAuthRepository(api: AuthApi): AuthRepository {
-        return AuthRepositoryImpl(api)
+    fun provideAuthRepository(api: AuthApi, sharedPreferences: SharedPreferences): AuthRepository {
+        return AuthRepositoryImpl(api,sharedPreferences)
     }
 
     @Provides
@@ -39,4 +42,11 @@ object AuthModule {
     fun provideRegisterUseCase(repository: AuthRepository): RegisterUseCase {
         return RegisterUseCase(repository)
     }
+
+    @Provides
+    @Singleton
+    fun provideLoginUseCae(repository: AuthRepository): LoginUseCase {
+        return LoginUseCase(repository)
+    }
+
 }

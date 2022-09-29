@@ -4,14 +4,13 @@ import com.example.socialmedia.feature_auth.domain.repository.AuthRepository
 import com.example.socialmedia.util.SimpleResource
 
 
-class RegisterUseCase(
+class LoginUseCase(
     private val repository: AuthRepository
 ) {
     suspend operator fun invoke(
         email: String,
-        username: String,
         password: String
     ): SimpleResource {
-        return repository.register(email.trim(), username.trim(), password.trim())
+        return repository.login(email.trim(),password.trim())
     }
 }

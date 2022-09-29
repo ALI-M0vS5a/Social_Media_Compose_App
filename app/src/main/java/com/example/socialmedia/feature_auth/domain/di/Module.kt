@@ -2,6 +2,7 @@ package com.example.socialmedia.feature_auth.domain.di
 
 
 import com.example.socialmedia.feature_auth.domain.use_case.ValidateEmail
+import com.example.socialmedia.feature_auth.domain.use_case.ValidateLoginEmailAndPasswordUseCase
 import com.example.socialmedia.feature_auth.domain.use_case.ValidatePassword
 import com.example.socialmedia.feature_auth.domain.use_case.ValidateUsername
 import dagger.Module
@@ -26,4 +27,7 @@ object Module {
     @Provides
     fun provideValidateUsername() = ValidateUsername()
 
+    @Provides
+    @Singleton
+    fun provideValidateLoginEmailAndPassword() = ValidateLoginEmailAndPasswordUseCase()
 }

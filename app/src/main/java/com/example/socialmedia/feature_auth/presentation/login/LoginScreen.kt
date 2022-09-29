@@ -1,14 +1,12 @@
 package com.example.socialmedia.feature_auth.presentation.login
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Facebook
 import androidx.compose.material.icons.filled.Mail
@@ -17,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -34,16 +33,35 @@ import com.example.socialmedia.presentation.components.StandardTextField
 import com.example.socialmedia.presentation.util.Screen
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val systemUiController: SystemUiController = rememberSystemUiController()
+    val context = LocalContext.current
     LaunchedEffect(key1 = true){
         systemUiController.setStatusBarColor(
             color = Color(android.graphics.Color.parseColor("#C1CED6"))
         )
+    }
+    LaunchedEffect(key1 = context) {
+        viewModel.eventFlow.collectLatest { events ->
+            when(events) {
+                is LoginViewModel.UiEvent.Message -> {
+                    Toast.makeText(
+                        context,
+                        events.uiText.asString(context),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                is LoginViewModel.UiEvent.Navigate -> {
+                    navController.navigate(events.route)
+                }
+            }
+        }
     }
     Column(
         modifier = Modifier
@@ -105,7 +123,7 @@ fun LoginScreen(
                     StandardButton(
                         text = stringResource(id = R.string.login),
                         onClick = {
-                            navController.navigate(Screen.MainFeedScreen.route)
+                            viewModel.onEvent(LoginEvents.Login)
                         }
                     )
                     Spacer(modifier = Modifier.height(40.dp))
@@ -136,24 +154,49 @@ fun EmailAndPassword(
     viewModel: LoginViewModel = hiltViewModel()
 
 ) {
+    val state = viewModel.state
     StandardTextField(
         onValueChange = {
-            viewModel.setUsernameText(it)
+            viewModel.onEvent(LoginEvents.EnteredEmail(it))
         },
-        text = viewModel.uiState.value.usernameText,
-        hint = stringResource(id = R.string.username_hint)
+        text = state.emailText,
+        hint = stringResource(id = R.string.username_hint),
+        error = state.emailError != null,
+        errorText = {
+            if(state.emailError != null) {
+                Text(
+                    text = state.emailError.asString(),
+                    color = MaterialTheme.colors.error,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
+        }
     )
     Spacer(modifier = modifier.height(20.dp))
     StandardTextField(
         onValueChange = {
-            viewModel.setPasswordText(it)
+            viewModel.onEvent(LoginEvents.EnteredPassword(it))
         },
-        text = viewModel.uiState.value.passwordText,
+        text = state.passwordText,
         keyboardType = KeyboardType.Password,
         hint = stringResource(id = R.string.password_hint),
-        showPasswordToggle = viewModel.uiState.value.showPassword,
+        showPasswordToggle = state.showPassword,
         onPasswordToggleClicked = {
-            viewModel.setShowPassword(it)
+            viewModel.onEvent(LoginEvents.ShowPassword)
+        },
+        error = state.passwordError != null,
+        errorText = {
+            if(state.passwordError != null){
+                Text(
+                    text = state.passwordError.asString(),
+                    color = MaterialTheme.colors.error,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
         }
     )
 }
