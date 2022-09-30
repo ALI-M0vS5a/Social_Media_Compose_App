@@ -1,4 +1,4 @@
-package com.example.socialmedia.presentation.create_post
+package com.example.socialmedia.feature_post.presentation.create_post
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border

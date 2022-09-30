@@ -1,4 +1,4 @@
-package com.example.socialmedia.presentation.create_post
+package com.example.socialmedia.feature_post.presentation.create_post
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

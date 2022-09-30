@@ -1,4 +1,4 @@
-package com.example.socialmedia.presentation.post_detail
+package com.example.socialmedia.feature_post.presentation.post_detail
 
 
 import androidx.compose.foundation.*

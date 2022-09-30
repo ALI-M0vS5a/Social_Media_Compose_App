@@ -8,12 +8,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.socialmedia.presentation.activity.ActivityScreen
 import com.example.socialmedia.presentation.chat.ChatScreen
-import com.example.socialmedia.presentation.create_post.CreatePostScreen
+import com.example.socialmedia.feature_post.presentation.create_post.CreatePostScreen
 import com.example.socialmedia.presentation.edit.EditProfileScreen
 import com.example.socialmedia.feature_auth.presentation.login.LoginScreen
-import com.example.socialmedia.presentation.main_feed.MainFeedScreen
+import com.example.socialmedia.feature_post.presentation.main_feed.MainFeedScreen
 import com.example.socialmedia.presentation.onboarding.OnBoardingScreen
-import com.example.socialmedia.presentation.post_detail.PostDetailScreen
+import com.example.socialmedia.feature_post.presentation.post_detail.PostDetailScreen
 import com.example.socialmedia.presentation.profile.ProfileScreen
 import com.example.socialmedia.feature_auth.presentation.register.RegisterScreen
 import com.example.socialmedia.presentation.search.SearchScreen

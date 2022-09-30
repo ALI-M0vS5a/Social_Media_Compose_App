@@ -5,10 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.socialmedia.R
 import com.example.socialmedia.feature_auth.domain.use_case.LoginUseCase
 import com.example.socialmedia.feature_auth.domain.use_case.ValidateLoginEmailAndPasswordUseCase
-import com.example.socialmedia.presentation.main_feed.MainFeedScreen
 import com.example.socialmedia.presentation.util.Screen
 import com.example.socialmedia.util.Resource
 import com.example.socialmedia.util.UiText
