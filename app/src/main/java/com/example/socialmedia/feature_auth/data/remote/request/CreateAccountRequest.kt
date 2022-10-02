@@ -1,4 +1,4 @@
-package com.example.socialmedia.feature_auth.data.dto.request
+package com.example.socialmedia.feature_auth.data.remote.request
 
 
 data class CreateAccountRequest(

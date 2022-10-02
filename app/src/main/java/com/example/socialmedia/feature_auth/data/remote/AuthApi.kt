@@ -1,9 +1,9 @@
 package com.example.socialmedia.feature_auth.data.remote
 
 import com.example.socialmedia.data.dto.response.BasicApiResponse
-import com.example.socialmedia.feature_auth.data.dto.request.CreateAccountRequest
-import com.example.socialmedia.feature_auth.data.dto.request.LoginRequest
-import com.example.socialmedia.feature_auth.data.dto.response.AuthResponse
+import com.example.socialmedia.feature_auth.data.remote.request.CreateAccountRequest
+import com.example.socialmedia.feature_auth.data.remote.request.LoginRequest
+import com.example.socialmedia.feature_auth.data.remote.response.AuthResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -26,7 +26,6 @@ interface AuthApi {
     suspend fun authenticate()
 
     companion object {
-        const val BASE_URL = "http://192.168.0.104:8081/"
+        const val BASE_URL = "http://192.168.0.109:8081/"
     }
-
 }

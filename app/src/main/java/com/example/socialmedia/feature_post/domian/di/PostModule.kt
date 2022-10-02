@@ -1,13 +1,17 @@
 package com.example.socialmedia.feature_post.domian.di
 
+import android.content.Context
 import com.example.socialmedia.feature_post.data.data_source.remote.PostApi
 import com.example.socialmedia.feature_post.data.repository.PostRepositoryImpl
 import com.example.socialmedia.feature_post.domian.repository.PostRepository
+import com.example.socialmedia.feature_post.domian.use_case.CreatePostUseCase
 import com.example.socialmedia.feature_post.domian.use_case.GetPostsForFollowsUseCase
 import com.example.socialmedia.feature_post.domian.use_case.PostUseCases
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -32,14 +36,19 @@ object PostModule {
 
     @Provides
     @Singleton
-    fun providePostRepository(api: PostApi): PostRepository {
-        return PostRepositoryImpl(api)
+    fun providePostRepository(
+        api: PostApi,
+        gson: Gson
+    ): PostRepository {
+        return PostRepositoryImpl(api,gson)
     }
+
     @Provides
     @Singleton
     fun providePostUseCases(repository: PostRepository): PostUseCases {
         return PostUseCases(
-            getPostsForFollowsUseCase = GetPostsForFollowsUseCase(repository)
+            getPostsForFollowsUseCase = GetPostsForFollowsUseCase(repository),
+            createPostUseCase = CreatePostUseCase(repository)
         )
     }
 }

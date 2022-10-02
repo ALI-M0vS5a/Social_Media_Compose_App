@@ -2,8 +2,8 @@ package com.example.socialmedia.feature_auth.data.repository
 
 import android.content.SharedPreferences
 import com.example.socialmedia.R
-import com.example.socialmedia.feature_auth.data.dto.request.CreateAccountRequest
-import com.example.socialmedia.feature_auth.data.dto.request.LoginRequest
+import com.example.socialmedia.feature_auth.data.remote.request.CreateAccountRequest
+import com.example.socialmedia.feature_auth.data.remote.request.LoginRequest
 import com.example.socialmedia.feature_auth.data.remote.AuthApi
 import com.example.socialmedia.feature_auth.domain.repository.AuthRepository
 import com.example.socialmedia.util.Constants
