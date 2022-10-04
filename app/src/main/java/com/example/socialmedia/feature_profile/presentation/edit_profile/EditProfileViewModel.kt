@@ -1,4 +1,4 @@
-package com.example.socialmedia.presentation.edit
+package com.example.socialmedia.feature_profile.presentation.edit_profile
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

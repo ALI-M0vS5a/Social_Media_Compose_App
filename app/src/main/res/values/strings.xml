@@ -76,4 +76,7 @@
     <string name="not_authenticated">You are not authenticated</string>
     <string name="error_file_not_found">Oops,  The file couldn\'t be found</string>
     <string name="post_image">Post Image</string>
+    <string name="success_post">Successfully created a post</string>
+    <string name="error_description_blank">Description Cannot be empty</string>
+    <string name="pick_image">Please pick an image</string>
 </resources>

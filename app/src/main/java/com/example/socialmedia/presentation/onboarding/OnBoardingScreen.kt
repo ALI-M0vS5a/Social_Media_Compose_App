@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 @ExperimentalPagerApi
 @Composable
 fun OnBoardingScreen(
-    navController: NavController
+    onNavigate: (String) -> Unit = {}
 ) {
     val state = rememberPagerState()
     val systemUiController: SystemUiController = rememberSystemUiController()
@@ -74,7 +74,7 @@ fun OnBoardingScreen(
                     .align(Alignment.CenterHorizontally),
                 state = state,
                 selectedIndex = state.currentPage,
-                navController = navController
+                onNavigate = onNavigate
             )
             Spacer(modifier = Modifier.height(55.dp))
         }
@@ -187,7 +187,7 @@ fun GoForwardButton(
     modifier: Modifier = Modifier,
     selectedIndex: Int,
     state: PagerState,
-    navController: NavController
+    onNavigate: (String) -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
     OutlinedButton(
@@ -206,7 +206,7 @@ fun GoForwardButton(
         onClick = {
             scope.launch {
                 if (state.currentPage == 2) {
-                    navController.navigate(Screen.LoginScreen.route)
+                    onNavigate(Screen.LoginScreen.route)
                 } else {
                     state.animateScrollToPage(
                         page = selectedIndex + 1,

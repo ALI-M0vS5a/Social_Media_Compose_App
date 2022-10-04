@@ -29,9 +29,9 @@ import retrofit2.http.Header
 
 @Composable
 fun ChatScreen(
-    navController: NavController
+   onNavigate: (String) -> Unit = {}
 ) {
     BackHandler {
-        navController.navigate(Screen.MainFeedScreen.route)
+        onNavigate(Screen.MainFeedScreen.route)
     }
 }

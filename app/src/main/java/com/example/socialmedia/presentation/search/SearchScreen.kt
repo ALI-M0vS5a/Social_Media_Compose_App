@@ -1,6 +1,7 @@
 package com.example.socialmedia.presentation.search
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,11 +33,12 @@ import com.example.socialmedia.presentation.util.Screen
 @ExperimentalMaterial3Api
 @Composable
 fun SearchScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigatePopBackStack: () -> Unit = {},
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     BackHandler {
-        navController.navigate(Screen.MainFeedScreen.route)
+        onNavigate(Screen.MainFeedScreen.route)
     }
     val state = viewModel.uiState.value
     Column(
@@ -48,7 +51,7 @@ fun SearchScreen(
             showBackArrow = true,
             backgroundColor = Color.White,
             onNavigateIconClick = {
-                navController.popBackStack()
+                onNavigatePopBackStack()
             },
             navActions = {
                 Icon(
@@ -99,12 +102,18 @@ fun SearchScreen(
                             followerCount = 20,
                             followingCount = 200,
                             postCount = 20,
-                            profilePictureUrl = ""
+                            profilePictureUrl = "",
+                            userId = "633050ab0d67c92dbb0ab01b"
                         ),
                         actionIcon = {
                             Icon(
                                 imageVector = Icons.Default.Person,
                                 contentDescription = null
+                            )
+                        },
+                        onItemClick = {
+                            onNavigate(
+                                Screen.ProfileScreen.route + "?userId=633472be5e3d775aa4161c15"
                             )
                         }
                     )

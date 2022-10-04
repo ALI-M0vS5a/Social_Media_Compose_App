@@ -31,13 +31,14 @@ import com.example.socialmedia.R
 import com.example.socialmedia.presentation.components.StandardButton
 import com.example.socialmedia.presentation.components.StandardTextField
 import com.example.socialmedia.presentation.util.Screen
+import com.example.socialmedia.util.UiEvent
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val systemUiController: SystemUiController = rememberSystemUiController()
@@ -50,15 +51,15 @@ fun LoginScreen(
     LaunchedEffect(key1 = context) {
         viewModel.eventFlow.collectLatest { events ->
             when(events) {
-                is LoginViewModel.UiEvent.Message -> {
+                is UiEvent.Message -> {
                     Toast.makeText(
                         context,
                         events.uiText.asString(context),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                is LoginViewModel.UiEvent.Navigate -> {
-                    navController.navigate(events.route)
+                is UiEvent.Navigate -> {
+                    onNavigate(events.route)
                 }
             }
         }
@@ -141,7 +142,7 @@ fun LoginScreen(
                     Spacer(modifier = Modifier.height(14.dp))
                     LoginByOthers()
                     Spacer(modifier = Modifier.height(40.dp))
-                    TextDonutHave(navController = navController)
+                    TextDonutHave(onNavigate = onNavigate)
                 }
             }
         }
@@ -204,7 +205,7 @@ fun EmailAndPassword(
 @Composable
 fun TextDonutHave(
     modifier: Modifier = Modifier,
-    navController: NavController
+    onNavigate: (String) -> Unit = {}
 ) {
     Text(
         text = buildAnnotatedString {
@@ -228,7 +229,7 @@ fun TextDonutHave(
             .padding(horizontal = 83.5.dp)
             .height(24.dp)
             .clickable {
-                navController.navigate(
+                onNavigate(
                     Screen.RegisterScreen.route
                 )
             },

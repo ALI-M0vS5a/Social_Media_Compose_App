@@ -1,7 +1,6 @@
 package com.example.socialmedia.feature_post.data.repository
 
 
-import android.content.Context
 import android.net.Uri
 import androidx.core.net.toFile
 import androidx.paging.Pager
@@ -9,11 +8,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.socialmedia.R
 import com.example.socialmedia.domain.models.Post
-import com.example.socialmedia.feature_post.data.data_source.remote.PostApi
-import com.example.socialmedia.feature_post.data.data_source.remote.request.CreatePostRequest
+import com.example.socialmedia.feature_post.data.remote.PostApi
+import com.example.socialmedia.feature_post.data.remote.request.CreatePostRequest
 import com.example.socialmedia.feature_post.data.paging.PostSource
 import com.example.socialmedia.feature_post.domian.repository.PostRepository
-import com.example.socialmedia.feature_post.util.getFileName
 import com.example.socialmedia.util.Constants
 import com.example.socialmedia.util.Resource
 import com.example.socialmedia.util.SimpleResource
@@ -25,9 +23,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
 
 

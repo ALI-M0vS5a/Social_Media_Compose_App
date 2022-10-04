@@ -27,7 +27,8 @@ import kotlin.random.Random
 
 @Composable
 fun ActivityScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigatePopBackStack: () -> Unit = {},
     viewModel: ActivityViewModel = hiltViewModel()
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -61,7 +62,7 @@ fun ActivityScreen(
                 navigationIconTint = Color.Black,
                 showBackArrow = true,
                 onNavigateIconClick = {
-                    navController.popBackStack()
+                    onNavigatePopBackStack()
                 }
             )
             LazyColumn(

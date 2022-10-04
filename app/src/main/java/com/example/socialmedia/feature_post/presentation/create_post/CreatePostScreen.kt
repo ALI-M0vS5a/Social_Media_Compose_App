@@ -1,6 +1,7 @@
 package com.example.socialmedia.feature_post.presentation.create_post
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -9,6 +10,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -34,17 +36,21 @@ import com.example.socialmedia.presentation.components.StandardTextField
 import com.example.socialmedia.presentation.components.StandardTopBar
 import com.example.socialmedia.presentation.util.Screen
 import com.example.socialmedia.util.CropActivityResultContract
+import com.example.socialmedia.util.UiEvent
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.flow.collectLatest
 import java.io.File
 import java.util.UUID
 
 
 @Composable
 fun CreatePostScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigatePopBackStack: () -> Unit = {},
     viewModel: CreatePostViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val imageUri = viewModel.chosenImageUri.value
     val cropActivityLauncher = rememberLauncherForActivityResult(
         contract = CropActivityResultContract()
@@ -65,7 +71,22 @@ fun CreatePostScreen(
         )
     }
     BackHandler {
-        navController.navigate(Screen.MainFeedScreen.route)
+        onNavigate(Screen.MainFeedScreen.route)
+    }
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is UiEvent.Message -> {
+                    Toast.makeText(context,
+                        event.uiText.asString(context),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                is UiEvent.NavigateUp -> {
+                    onNavigate(Screen.MainFeedScreen.route)
+                }
+            }
+        }
     }
     Column(modifier = Modifier.fillMaxSize()) {
         StandardTopBar(
@@ -78,7 +99,7 @@ fun CreatePostScreen(
             modifier = Modifier.fillMaxWidth(),
             showBackArrow = true,
             onNavigateIconClick = {
-                navController.navigate(Screen.MainFeedScreen.route)
+                onNavigate(Screen.MainFeedScreen.route)
             }
         )
 
@@ -140,7 +161,16 @@ fun CreatePostScreen(
             borderColor = Color.Black,
             onClick = {
                 viewModel.onEvent(CreatePostEvents.PostImage)
-            }
+            },
+            enabled = !viewModel.isLoading.value
         )
+        Spacer(modifier = Modifier.height(15.dp))
+        if(viewModel.isLoading.value) {
+            CircularProgressIndicator(
+                color = Color(android.graphics.Color.parseColor("#8CDCE1")),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
     }
 }

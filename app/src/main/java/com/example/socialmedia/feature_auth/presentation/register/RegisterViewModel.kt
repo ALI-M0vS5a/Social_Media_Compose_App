@@ -11,6 +11,7 @@ import com.example.socialmedia.feature_auth.domain.use_case.ValidateEmail
 import com.example.socialmedia.feature_auth.domain.use_case.ValidatePassword
 import com.example.socialmedia.feature_auth.domain.use_case.ValidateUsername
 import com.example.socialmedia.util.Resource
+import com.example.socialmedia.util.UiEvent
 import com.example.socialmedia.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -113,10 +114,6 @@ class RegisterViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    sealed class UiEvent {
-        data class Success(val uiText: UiText): UiEvent()
     }
 }
 

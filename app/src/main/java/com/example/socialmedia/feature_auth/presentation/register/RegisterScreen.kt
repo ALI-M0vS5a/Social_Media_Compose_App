@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import com.example.socialmedia.R
 import com.example.socialmedia.presentation.components.StandardButton
 import com.example.socialmedia.presentation.components.StandardTextField
+import com.example.socialmedia.util.UiEvent
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
@@ -37,7 +38,8 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun RegisterScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigatePopBackStack: () -> Unit = {},
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val systemUiController: SystemUiController = rememberSystemUiController()
@@ -50,7 +52,7 @@ fun RegisterScreen(
     LaunchedEffect(key1 = context) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
-                is RegisterViewModel.UiEvent.Success -> {
+                is UiEvent.Success -> {
                     Toast.makeText(
                         context,
                         event.uiText.asString(context),
@@ -114,7 +116,7 @@ fun RegisterScreen(
                         enabled = !viewModel.state.isLoading
                     )
                     Spacer(modifier = Modifier.height(40.dp))
-                    TextAlready(navController = navController)
+                    TextAlready(onNavigatePopBackStack = onNavigatePopBackStack)
                     if(viewModel.state.isLoading){
                         CircularProgressIndicator(
                             color = Color(android.graphics.Color.parseColor("#8CDCE1"))
@@ -201,7 +203,7 @@ fun UsernameAndEmailAndPassword(
 @Composable
 fun TextAlready(
     modifier: Modifier = Modifier,
-    navController: NavController
+    onNavigatePopBackStack: () -> Unit = {}
 ) {
     Text(
         text = buildAnnotatedString {
@@ -225,7 +227,7 @@ fun TextAlready(
             .padding(horizontal = 83.5.dp)
             .height(24.dp)
             .clickable {
-                navController.popBackStack()
+                onNavigatePopBackStack()
             },
         color = Color.Black,
         textAlign = TextAlign.Center

@@ -1,4 +1,4 @@
-package com.example.socialmedia.presentation.profile.components
+package com.example.socialmedia.feature_profile.presentation.profile.components
 
 
 import android.graphics.Color
@@ -32,6 +32,8 @@ import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.compose.layoutId
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.socialmedia.R
 import com.example.socialmedia.domain.models.User
 import com.example.socialmedia.presentation.util.Screen
@@ -40,7 +42,8 @@ import com.example.socialmedia.presentation.util.Screen
 @Composable
 fun MotionLayoutProfileHeader(
     modifier: Modifier = Modifier,
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigatePopBackStack: () -> Unit = {},
     user: User,
     isOwnProfile: Boolean,
     progress: Float
@@ -69,7 +72,7 @@ fun MotionLayoutProfileHeader(
         )
         IconButton(
             onClick = {
-                navController.navigate(Screen.MainFeedScreen.route)
+                onNavigate(Screen.MainFeedScreen.route)
             },
             modifier = Modifier
                 .layoutId("nav_back")
@@ -80,7 +83,12 @@ fun MotionLayoutProfileHeader(
             )
         }
         Image(
-            painter = painterResource(id = R.drawable.profile_pic),
+            painter = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(context)
+                    .data(user.profilePictureUrl)
+                    .crossfade(true)
+                    .build()
+            ),
             contentDescription = stringResource(id = R.string.profile_pic),
             contentScale = ContentScale.Crop,
             modifier = Modifier

@@ -3,7 +3,7 @@ package com.example.socialmedia.feature_post.data.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.socialmedia.domain.models.Post
-import com.example.socialmedia.feature_post.data.data_source.remote.PostApi
+import com.example.socialmedia.feature_post.data.remote.PostApi
 import com.example.socialmedia.util.Constants
 import retrofit2.HttpException
 import java.io.IOException

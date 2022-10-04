@@ -1,7 +1,6 @@
 package com.example.socialmedia.feature_post.domian.di
 
-import android.content.Context
-import com.example.socialmedia.feature_post.data.data_source.remote.PostApi
+import com.example.socialmedia.feature_post.data.remote.PostApi
 import com.example.socialmedia.feature_post.data.repository.PostRepositoryImpl
 import com.example.socialmedia.feature_post.domian.repository.PostRepository
 import com.example.socialmedia.feature_post.domian.use_case.CreatePostUseCase
@@ -11,7 +10,6 @@ import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

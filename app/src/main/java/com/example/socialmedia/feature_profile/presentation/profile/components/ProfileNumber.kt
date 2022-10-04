@@ -1,4 +1,4 @@
-package com.example.socialmedia.presentation.profile.components
+package com.example.socialmedia.feature_profile.presentation.profile.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

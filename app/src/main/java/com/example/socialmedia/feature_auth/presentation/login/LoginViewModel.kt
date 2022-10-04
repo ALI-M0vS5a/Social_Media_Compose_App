@@ -9,6 +9,7 @@ import com.example.socialmedia.feature_auth.domain.use_case.LoginUseCase
 import com.example.socialmedia.feature_auth.domain.use_case.ValidateLoginEmailAndPasswordUseCase
 import com.example.socialmedia.presentation.util.Screen
 import com.example.socialmedia.util.Resource
+import com.example.socialmedia.util.UiEvent
 import com.example.socialmedia.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -96,10 +97,5 @@ class LoginViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    sealed class UiEvent {
-        data class Message(val uiText: UiText): UiEvent()
-        data class Navigate(val route: String): UiEvent()
     }
 }

@@ -22,7 +22,8 @@ fun StandardCenteredTopBar(
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit = {},
     showBackArrow: Boolean = false,
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigatePopBackStack: () -> Unit = {},
     navActions: @Composable RowScope.() -> Unit = {},
     backgroundColor: Color = Color.Gray
 
@@ -33,7 +34,7 @@ fun StandardCenteredTopBar(
             if(showBackArrow){
                 IconButton(
                     onClick = {
-                        navController.popBackStack()
+                        onNavigatePopBackStack
                     }
                 ) {
                     Icon(

@@ -1,11 +1,8 @@
-package com.example.socialmedia.feature_post.data.data_source.remote
+package com.example.socialmedia.feature_post.data.remote
 
 import com.example.socialmedia.data.dto.response.BasicApiResponse
 import com.example.socialmedia.domain.models.Post
-import com.example.socialmedia.feature_post.data.data_source.remote.request.CreatePostRequest
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -29,6 +26,6 @@ interface PostApi {
     ): BasicApiResponse<Unit>
 
     companion object {
-        const val BASE_URL = "http://192.168.0.109:8081/"
+        const val BASE_URL = "http://192.168.0.104:8081/"
     }
 }

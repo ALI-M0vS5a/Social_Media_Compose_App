@@ -33,7 +33,8 @@ import com.example.socialmedia.presentation.components.StandardTopBar
 
 @Composable
 fun PostDetailScreen(
-    navController: NavController
+    onNavigate: (String) -> Unit = {},
+    onNavigatePopBackStack: () -> Unit = {}
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         StandardTopBar(
@@ -88,7 +89,7 @@ fun PostDetailScreen(
             backgroundColor = Color.White,
             navigationIconTint = Color.Black,
             onNavigateIconClick = {
-                navController.popBackStack()
+                onNavigatePopBackStack()
             }
         )
         LazyColumn(

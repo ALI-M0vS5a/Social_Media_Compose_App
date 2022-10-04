@@ -1,4 +1,4 @@
-package com.example.socialmedia.presentation.edit.components
+package com.example.socialmedia.feature_profile.presentation.edit_profile.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable

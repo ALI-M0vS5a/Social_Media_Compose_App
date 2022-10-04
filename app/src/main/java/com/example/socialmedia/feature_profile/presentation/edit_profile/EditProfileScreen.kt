@@ -1,13 +1,11 @@
-package com.example.socialmedia.presentation.edit
+package com.example.socialmedia.feature_profile.presentation.edit_profile
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BabyChangingStation
-import androidx.compose.material.icons.outlined.Camera
 import androidx.compose.material.icons.outlined.Facebook
 import androidx.compose.material.icons.outlined.LinkedCamera
 import androidx.compose.material.icons.outlined.PhotoCamera
@@ -20,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -37,14 +34,15 @@ import com.example.socialmedia.R
 import com.example.socialmedia.presentation.components.StandardButton
 import com.example.socialmedia.presentation.components.StandardCenteredTopBar
 import com.example.socialmedia.presentation.components.StandardTextField
-import com.example.socialmedia.presentation.edit.components.Chip
+import com.example.socialmedia.feature_profile.presentation.edit_profile.components.Chip
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 
 @ExperimentalMaterial3Api
 @Composable
 fun EditProfileScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigatePopBackStack: () -> Unit = {},
     viewModel: EditProfileViewModel = hiltViewModel()
 ) {
 
@@ -54,7 +52,8 @@ fun EditProfileScreen(
             .verticalScroll(rememberScrollState())
     ) {
         StandardCenteredTopBar(
-            navController = navController,
+            onNavigate = onNavigate,
+            onNavigatePopBackStack = onNavigatePopBackStack,
             showBackArrow = true,
             title = {
                 Text(

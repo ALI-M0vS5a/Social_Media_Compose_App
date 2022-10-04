@@ -38,7 +38,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @ExperimentalMaterial3Api
 @Composable
 fun MainFeedScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigatePopBackStack: () -> Unit = {},
     finish: () -> Unit,
     viewModel: MainFeedViewModel = hiltViewModel()
 ) {
@@ -60,7 +61,7 @@ fun MainFeedScreen(
     ) {
         Spacer(modifier = Modifier.height(10.dp))
         StandardCenteredTopBar(
-            navController = navController,
+            onNavigatePopBackStack = onNavigatePopBackStack,
             title = {
                 Text(
                     text = stringResource(id = R.string.main_feed_title),
@@ -74,7 +75,7 @@ fun MainFeedScreen(
             navActions = {
                 IconButton(
                     onClick = {
-                        navController.navigate(Screen.ActivityScreen.route)
+                        onNavigate(Screen.ActivityScreen.route)
                     }
                 ) {
                     Icon(
@@ -111,7 +112,7 @@ fun MainFeedScreen(
                             .height(303.dp)
                             .padding(horizontal = 41.dp)
                     ) {
-                        navController.navigate(Screen.PostDetailScreen.route)
+                      onNavigate(Screen.PostDetailScreen.route)
                     }
                 }
                 item {
