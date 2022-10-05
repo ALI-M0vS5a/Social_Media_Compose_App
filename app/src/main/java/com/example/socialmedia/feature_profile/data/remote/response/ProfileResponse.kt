@@ -1,6 +1,6 @@
 package com.example.socialmedia.feature_profile.data.remote.response
 
-import com.example.socialmedia.feature_profile.domain.Profile
+import com.example.socialmedia.feature_profile.domain.model.Profile
 
 data class ProfileResponse(
     val userId: String,
@@ -10,7 +10,8 @@ data class ProfileResponse(
     val followingCount: Int,
     val postCount: Int,
     val profilePictureUrl: String,
-    val topSkillUrls: List<String>,
+    val bannerUrl: String,
+    val topSkills: List<SkillDto>,
     val gitHubUrl: String?,
     val instagramUrl: String?,
     val linkedinUrl: String?,
@@ -26,7 +27,8 @@ data class ProfileResponse(
             followingCount = followingCount,
             postCount = postCount,
             profilePictureUrl = profilePictureUrl,
-            topSkillUrls = topSkillUrls,
+            bannerUrl = bannerUrl,
+            topSkills = topSkills.map { it.toSkill() },
             gitHubUrl = gitHubUrl,
             instagramUrl = instagramUrl,
             linkedinUrl = linkedinUrl,

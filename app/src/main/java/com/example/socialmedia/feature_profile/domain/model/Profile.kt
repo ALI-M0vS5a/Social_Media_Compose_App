@@ -1,4 +1,4 @@
-package com.example.socialmedia.feature_profile.domain
+package com.example.socialmedia.feature_profile.domain.model
 
 
 data class Profile(
@@ -9,7 +9,8 @@ data class Profile(
     val followingCount: Int,
     val postCount: Int,
     val profilePictureUrl: String,
-    val topSkillUrls: List<String>,
+    val bannerUrl: String,
+    val topSkills: List<Skill>,
     val gitHubUrl: String?,
     val instagramUrl: String?,
     val linkedinUrl: String?,

@@ -1,6 +1,6 @@
 package com.example.socialmedia.feature_profile.presentation.profile
 
-import com.example.socialmedia.feature_profile.domain.Profile
+import com.example.socialmedia.feature_profile.domain.model.Profile
 
 data class ProfileState(
     val profile: Profile? = null,

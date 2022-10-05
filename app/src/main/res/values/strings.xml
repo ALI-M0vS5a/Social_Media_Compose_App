@@ -79,4 +79,9 @@
     <string name="success_post">Successfully created a post</string>
     <string name="error_description_blank">Description Cannot be empty</string>
     <string name="pick_image">Please pick an image</string>
+    <string name="error_couldnt_load_profile">Oops coudn\'t load profile</string>
+    <string name="error_loading_skills">Error loading skills</string>
+    <string name="banner_pic">Banner pic</string>
+    <string name="error_username_empty">username can\'t be empty</string>
+    <string name="updated_profile">Successfully updated profile</string>
 </resources>

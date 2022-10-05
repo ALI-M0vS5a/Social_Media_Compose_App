@@ -70,6 +70,7 @@ fun ProfileScreen(
                     userId = profile.userId,
                     username = profile.username,
                     profilePictureUrl = profile.profilePictureUrl,
+                    bannerUrl = profile.bannerUrl,
                     description = profile.bio,
                     followingCount = profile.followingCount,
                     followerCount = profile.followerCount,
@@ -94,6 +95,7 @@ fun ProfileScreen(
                         user = User(
                             userId = profile.userId,
                             profilePictureUrl = profile.profilePictureUrl,
+                            bannerUrl = profile.bannerUrl,
                             username = profile.username,
                             description = profile.bio,
                             followerCount = profile.followerCount,
@@ -101,7 +103,7 @@ fun ProfileScreen(
                             postCount = profile.postCount
                         ),
                         onEditButtonClick = {
-                            onNavigate(Screen.EditProfileScreen.route)
+                            onNavigate(Screen.EditProfileScreen.route + "/${profile.userId}")
                         },
                         isOwnProfile = profile.isOwnProfile
                     )

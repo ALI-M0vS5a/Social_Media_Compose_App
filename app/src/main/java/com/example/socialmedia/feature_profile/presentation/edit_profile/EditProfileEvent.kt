@@ -1,0 +1,19 @@
+package com.example.socialmedia.feature_profile.presentation.edit_profile
+
+import android.net.Uri
+
+
+sealed class EditProfileEvent {
+    data class EnteredUsername(val username: String): EditProfileEvent()
+    data class EnteredGitHubUrl(val gitHubUrl: String): EditProfileEvent()
+    data class EnteredInstagramUrl(val instagram: String): EditProfileEvent()
+    data class EnteredLinkedinUrl(val linkedin: String): EditProfileEvent()
+    data class EnteredBio(val bio: String): EditProfileEvent()
+
+    data class CropProfilePicture(val pictureUri: Uri?): EditProfileEvent()
+    data class CropBannerImage(val bannerUri: Uri?): EditProfileEvent()
+
+    data class SetSkillSelected(val skill: String,val selected: Boolean): EditProfileEvent()
+
+    object UpdateProfile: EditProfileEvent()
+}

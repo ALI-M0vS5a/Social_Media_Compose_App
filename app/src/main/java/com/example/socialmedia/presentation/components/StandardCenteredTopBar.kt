@@ -34,7 +34,7 @@ fun StandardCenteredTopBar(
             if(showBackArrow){
                 IconButton(
                     onClick = {
-                        onNavigatePopBackStack
+                        onNavigatePopBackStack()
                     }
                 ) {
                     Icon(

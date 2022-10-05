@@ -1,6 +1,6 @@
 package com.example.socialmedia.feature_profile.data.remote.response
 
-import com.example.socialmedia.feature_profile.domain.UserItem
+import com.example.socialmedia.feature_profile.domain.model.UserItem
 
 
 data class UserResponseItem(

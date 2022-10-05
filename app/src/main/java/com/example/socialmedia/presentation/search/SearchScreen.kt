@@ -103,7 +103,8 @@ fun SearchScreen(
                             followingCount = 200,
                             postCount = 20,
                             profilePictureUrl = "",
-                            userId = "633050ab0d67c92dbb0ab01b"
+                            bannerUrl = "",
+                            userId = "633d59b2b24e7b0be6fb2021"
                         ),
                         actionIcon = {
                             Icon(
@@ -113,7 +114,7 @@ fun SearchScreen(
                         },
                         onItemClick = {
                             onNavigate(
-                                Screen.ProfileScreen.route + "?userId=633472be5e3d775aa4161c15"
+                                Screen.ProfileScreen.route + "?userId=633d59b2b24e7b0be6fb2021"
                             )
                         }
                     )

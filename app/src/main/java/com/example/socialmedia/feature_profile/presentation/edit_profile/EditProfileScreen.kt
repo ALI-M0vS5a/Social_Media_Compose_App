@@ -1,11 +1,16 @@
 package com.example.socialmedia.feature_profile.presentation.edit_profile
 
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BabyChangingStation
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Facebook
 import androidx.compose.material.icons.outlined.LinkedCamera
 import androidx.compose.material.icons.outlined.PhotoCamera
@@ -13,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,7 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,14 +35,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.socialmedia.R
+import com.example.socialmedia.feature_profile.presentation.edit_profile.components.Chip
 import com.example.socialmedia.presentation.components.StandardButton
 import com.example.socialmedia.presentation.components.StandardCenteredTopBar
 import com.example.socialmedia.presentation.components.StandardTextField
-import com.example.socialmedia.feature_profile.presentation.edit_profile.components.Chip
+import com.example.socialmedia.util.CropActivityResultContract
+import com.example.socialmedia.util.UiEvent
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
+import kotlinx.coroutines.flow.collectLatest
 
 @ExperimentalMaterial3Api
 @Composable
@@ -45,6 +55,45 @@ fun EditProfileScreen(
     onNavigatePopBackStack: () -> Unit = {},
     viewModel: EditProfileViewModel = hiltViewModel()
 ) {
+
+    val context = LocalContext.current
+    val profileState = viewModel.uiState.value
+
+    val cropProfilePictureLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract(1f, 1f)
+    ) {
+        viewModel.onEvent(EditProfileEvent.CropProfilePicture(it))
+    }
+    val cropBannerImageLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract(5f, 2f)
+    ) {
+        viewModel.onEvent(EditProfileEvent.CropBannerImage(it))
+    }
+    val profilePictureGalleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+    ) {
+        cropProfilePictureLauncher.launch(it)
+    }
+    val bannerImageGalleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+    ) {
+        cropBannerImageLauncher.launch(it)
+    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is UiEvent.Message -> {
+                    Toast.makeText(
+                        context,
+                        event.uiText.asString(context),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else -> Unit
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -68,27 +117,42 @@ fun EditProfileScreen(
             modifier = Modifier.fillMaxWidth()
         )
         BannerEditSection(
-            profileImage = painterResource(id = R.drawable.profile_pic)
+            profileImage = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(context)
+                    .data(profileState.profile?.profilePictureUrl)
+                    .crossfade(true)
+                    .build()
+            ),
+            bannerImage = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(context)
+                    .data(profileState.profile?.bannerUrl)
+                    .crossfade(true)
+                    .build()
+            ),
+            modifier = Modifier,
+            onBannerClick = {
+                bannerImageGalleryLauncher.launch("image/*")
+            },
+            onCameraClick = {
+                profilePictureGalleryLauncher.launch("image/*")
+            }
         )
         StandardTextField(
-            text = viewModel.uiState.value.username,
+            text = profileState.username,
             onValueChange = {
-                viewModel.setUsername(
-                    username = it
-                )
+                viewModel.onEvent(EditProfileEvent.EnteredUsername(it))
             },
             keyboardType = KeyboardType.Text,
             hint = stringResource(id = R.string.username_hint),
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            leadingIcon = Icons.Filled.Person
         )
         Spacer(modifier = Modifier.height(25.dp))
         StandardTextField(
-            text = viewModel.uiState.value.github,
+            text = profileState.github,
             onValueChange = {
-                viewModel.setGithubUrlText(
-                    githubUrlText = it
-                )
+                viewModel.onEvent(EditProfileEvent.EnteredGitHubUrl(it))
             },
             hint = stringResource(id = R.string.github),
             modifier = Modifier
@@ -98,11 +162,9 @@ fun EditProfileScreen(
         )
         Spacer(modifier = Modifier.height(25.dp))
         StandardTextField(
-            text = viewModel.uiState.value.instagram,
+            text = profileState.instagram,
             onValueChange = {
-                viewModel.setInstagramUrlText(
-                    instagramUrlText = it
-                )
+                viewModel.onEvent(EditProfileEvent.EnteredInstagramUrl(it))
             },
             hint = stringResource(id = R.string.instagram),
             modifier = Modifier
@@ -112,11 +174,9 @@ fun EditProfileScreen(
         )
         Spacer(modifier = Modifier.height(25.dp))
         StandardTextField(
-            text = viewModel.uiState.value.linkedin,
+            text = profileState.linkedin,
             onValueChange = {
-                viewModel.setLinkedinUrlText(
-                    linkedinUrlText = it
-                )
+                viewModel.onEvent(EditProfileEvent.EnteredLinkedinUrl(it))
             },
             hint = stringResource(id = R.string.linkedin),
             modifier = Modifier
@@ -126,17 +186,16 @@ fun EditProfileScreen(
         )
         Spacer(modifier = Modifier.height(25.dp))
         StandardTextField(
-            text = viewModel.uiState.value.yourBio,
+            text = profileState.yourBio,
             onValueChange = {
-                viewModel.setYourBio(
-                    yourBio = it
-                )
+                viewModel.onEvent(EditProfileEvent.EnteredBio(it))
             },
             hint = stringResource(id = R.string.your_bio),
             modifier = Modifier
                 .fillMaxWidth(),
             singleLine = false,
-            maxLine = 3
+            maxLine = 3,
+            leadingIcon = Icons.Filled.Description
         )
         Spacer(modifier = Modifier.height(25.dp))
         Text(
@@ -157,24 +216,10 @@ fun EditProfileScreen(
             mainAxisSpacing = 10.dp,
             crossAxisSpacing = 10.dp
         ) {
-            listOf(
-                "Kotlin",
-                "Python",
-                "Assembly",
-                "C++",
-                "C#",
-                "TypeScript",
-                "Dart",
-                "JavaScript",
-                "Dart",
-                "Java",
-                "Ruby",
-                "Maya",
-                "PHP",
-                "CSS"
-            ).forEach {
+            viewModel.uiState.value.skills.forEach {
                 Chip(
-                    text = it
+                    text = it.name,
+                    selected = it in viewModel.uiState.value.selectedSkills
                 ) {
 
                 }
@@ -189,7 +234,10 @@ fun EditProfileScreen(
             textColor = Color.White,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 25.dp)
+                .padding(bottom = 25.dp),
+            onClick = {
+                viewModel.onEvent(EditProfileEvent.UpdateProfile)
+            }
         )
     }
 
@@ -200,13 +248,14 @@ fun BannerEditSection(
     modifier: Modifier = Modifier,
     onCameraClick: () -> Unit = {},
     onBannerClick: () -> Unit = {},
+    bannerImage: Painter,
     profileImage: Painter
 ) {
     val bannerHeight = (LocalConfiguration.current.screenWidthDp / 2.5f).dp
     val profilePictureSize = 90.dp
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -215,10 +264,17 @@ fun BannerEditSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .height((bannerHeight + profilePictureSize) / 2f)
-                .background(
-                    color = Color(android.graphics.Color.parseColor("#C1CED6"))
-                )
-        )
+                .clickable { onBannerClick() }
+        ) {
+            Image(
+                painter = bannerImage,
+                contentDescription = stringResource(id = R.string.banner_pic),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(bannerHeight)
+            )
+        }
         Image(
             painter = profileImage,
             contentDescription = stringResource(id = R.string.profile_pic),
@@ -232,14 +288,16 @@ fun BannerEditSection(
                     color = Color(android.graphics.Color.parseColor("#8CDCE1")),
                     shape = CircleShape
                 )
+                .clickable { onCameraClick() }
 
         )
         CameraProfile(
             modifier = Modifier
                 .offset(
-                    y = -profilePictureSize /1.25f,
+                    y = -profilePictureSize / 1.25f,
                     x = profilePictureSize / 2.3f
                 )
+                .clickable { onCameraClick() }
         )
     }
 }
