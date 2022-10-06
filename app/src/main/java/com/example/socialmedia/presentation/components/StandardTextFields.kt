@@ -37,7 +37,7 @@ fun StandardTextField(
     error: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     onValueChange: (String) -> Unit,
-    maxLength: Int = 40,
+    maxLength: Int = 45,
     maxLine: Int = 1,
     showPasswordToggle: Boolean = false,
     singleLine: Boolean = true,

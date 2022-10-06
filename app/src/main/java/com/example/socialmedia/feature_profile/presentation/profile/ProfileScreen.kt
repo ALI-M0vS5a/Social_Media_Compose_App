@@ -32,7 +32,8 @@ import kotlinx.coroutines.flow.collectLatest
 fun ProfileScreen(
     onNavigate: (String) -> Unit = {},
     onNavigatePopBackStack: () -> Unit = {},
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: ProfileViewModel = hiltViewModel(),
+    userId: String
 ) {
     BackHandler {
         onNavigate(Screen.MainFeedScreen.route)
@@ -47,6 +48,7 @@ fun ProfileScreen(
             tween(700) else tween(300)
     )
     LaunchedEffect(key1 = true) {
+        viewModel.getProfile(userId)
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
                 is UiEvent.Message -> {
@@ -56,6 +58,7 @@ fun ProfileScreen(
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+                else -> Unit
             }
         }
     }

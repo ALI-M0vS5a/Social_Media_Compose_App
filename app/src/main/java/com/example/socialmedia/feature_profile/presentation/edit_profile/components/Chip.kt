@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.dp
 fun Chip(
     modifier: Modifier = Modifier,
     text: String,
-    selected: Boolean = false,
-    selectedColor: Color = Color(android.graphics.Color.parseColor("#8CDCE1")),
+    selected: Boolean,
+    selectedColor: Color = Color.Red,
     unSelectedColor: Color = Color.Black,
     onChipClick: () -> Unit
 ) {

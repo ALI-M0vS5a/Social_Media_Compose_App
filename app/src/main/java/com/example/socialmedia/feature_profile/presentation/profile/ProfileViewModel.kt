@@ -30,9 +30,7 @@ class ProfileViewModel @Inject constructor(
 
 
     init {
-        println(savedStateHandle.get<String>("userId"))
         savedStateHandle.get<String>("userId")?.let { userId ->
-            println(userId)
             getProfile(userId)
         }
     }
@@ -45,7 +43,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun getProfile(userId: String) {
+     fun getProfile(userId: String) {
         viewModelScope.launch {
             _state.value = state.value.copy(
                 isLoading = true

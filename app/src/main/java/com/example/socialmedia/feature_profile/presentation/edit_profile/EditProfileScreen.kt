@@ -42,6 +42,7 @@ import com.example.socialmedia.feature_profile.presentation.edit_profile.compone
 import com.example.socialmedia.presentation.components.StandardButton
 import com.example.socialmedia.presentation.components.StandardCenteredTopBar
 import com.example.socialmedia.presentation.components.StandardTextField
+import com.example.socialmedia.presentation.util.Screen
 import com.example.socialmedia.util.CropActivityResultContract
 import com.example.socialmedia.util.UiEvent
 import com.google.accompanist.flowlayout.FlowRow
@@ -90,6 +91,9 @@ fun EditProfileScreen(
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+                is UiEvent.NavigateUp -> {
+                    onNavigatePopBackStack()
+                }
                 else -> Unit
             }
         }
@@ -119,13 +123,13 @@ fun EditProfileScreen(
         BannerEditSection(
             profileImage = rememberAsyncImagePainter(
                 model = ImageRequest.Builder(context)
-                    .data(profileState.profile?.profilePictureUrl)
+                    .data(viewModel.uiState.value.profilePictureUri ?: profileState.profile?.profilePictureUrl)
                     .crossfade(true)
                     .build()
             ),
             bannerImage = rememberAsyncImagePainter(
                 model = ImageRequest.Builder(context)
-                    .data(profileState.profile?.bannerUrl)
+                    .data(viewModel.uiState.value.bannerUri ?: profileState.profile?.bannerUrl)
                     .crossfade(true)
                     .build()
             ),
@@ -216,15 +220,15 @@ fun EditProfileScreen(
             mainAxisSpacing = 10.dp,
             crossAxisSpacing = 10.dp
         ) {
-            viewModel.uiState.value.skills.forEach {
+            viewModel.uiState.value.skills.forEach { skill ->
                 Chip(
-                    text = it.name,
-                    selected = it in viewModel.uiState.value.selectedSkills
-                ) {
-
-                }
+                    text = skill.name,
+                    selected = skill in viewModel.uiState.value.selectedSkills,
+                    onChipClick = {
+                        viewModel.onEvent(EditProfileEvent.SetSkillSelected(skill))
+                    }
+                )
             }
-
         }
         Spacer(modifier = Modifier.height(105.dp))
         StandardButton(

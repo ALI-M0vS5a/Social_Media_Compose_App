@@ -112,6 +112,9 @@ class EditProfileViewModel @Inject constructor(
                     _eventFlow.emit(
                         UiEvent.Message(UiText.StringResource(R.string.updated_profile))
                     )
+                    viewModelScope.launch {
+                        _eventFlow.emit(UiEvent.NavigateUp)
+                    }
                     return@launch
                 }
                 is Resource.Error -> {
@@ -161,7 +164,25 @@ class EditProfileViewModel @Inject constructor(
                 )
             }
             is EditProfileEvent.SetSkillSelected -> {
-
+                val result = profileUseCases.setSkillSelectedUseCase(
+                    selectedSkills = uiState.value.selectedSkills,
+                    event.skill
+                )
+                viewModelScope.launch {
+                    when(result) {
+                        is Resource.Success -> {
+                            _uiState.value = uiState.value.copy(
+                                selectedSkills = result.data ?: kotlin.run {
+                                    _eventFlow.emit(UiEvent.Message(UiText.unknownError()))
+                                    return@launch
+                                }
+                            )
+                        }
+                        is Resource.Error -> {
+                            _eventFlow.emit(UiEvent.Message(result.uiText ?: UiText.unknownError()))
+                        }
+                    }
+                }
             }
             is EditProfileEvent.UpdateProfile -> {
                 updateProfile()

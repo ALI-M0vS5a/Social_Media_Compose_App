@@ -79,7 +79,10 @@ fun Navigation(
                 }
             )
         ) {
-            ProfileScreen(onNavigate = navController::navigate)
+            ProfileScreen(
+                onNavigate = navController::navigate,
+                userId = it.arguments?.getString("userId") ?: ""
+            )
         }
         composable(route = Screen.CreatePostScreen.route) {
             CreatePostScreen(
