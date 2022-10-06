@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.socialmedia.presentation.components.StandardScaffold
@@ -68,12 +69,7 @@ class MainActivity : ComponentActivity() {
                     }
                     StandardScaffold(
                         navController = navController,
-                        showBottomBar = navBackStackEntry?.destination?.route in listOf(
-                            Screen.MainFeedScreen.route,
-                            Screen.ChatScreen.route,
-                            Screen.SearchScreen.route,
-                            Screen.ProfileScreen.route
-                        ),
+                        showBottomBar = shouldShowBottomBar(navBackStackEntry),
                         modifier = Modifier.fillMaxSize(),
                         onFabClick = {
                             navController.navigate(Screen.CreatePostScreen.route)
@@ -95,6 +91,17 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+    private fun shouldShowBottomBar(backStackEntry: NavBackStackEntry?): Boolean {
+        val doesRouteMatch = backStackEntry?.destination?.route in listOf(
+            Screen.MainFeedScreen.route,
+            Screen.ChatScreen.route,
+            Screen.SearchScreen.route,
+        )
+        val isOwnProfile = backStackEntry?.destination?.route == "${Screen.ProfileScreen.route}?userId={userId}" &&
+                backStackEntry.arguments?.getString("userId") == null
+
+        return doesRouteMatch || isOwnProfile
     }
 
     private val finish: () -> Unit = {

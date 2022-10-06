@@ -38,7 +38,7 @@ class EditProfileViewModel @Inject constructor(
 
     private fun getSkills() {
         viewModelScope.launch {
-            when(val result = profileUseCases.getSkillsUseCase()) {
+            when(val result = profileUseCases.getSkills()) {
                 is Resource.Success -> {
                     _uiState.value = uiState.value.copy(
                         skills = result.data ?: kotlin.run {
@@ -57,7 +57,7 @@ class EditProfileViewModel @Inject constructor(
     private fun getProfile(userId: String) {
         viewModelScope.launch {
             _uiState.value = uiState.value.copy(isLoading = true)
-            when (val result = profileUseCases.getProfileUseCase(userId)) {
+            when (val result = profileUseCases.getProfile(userId)) {
                 is Resource.Success -> {
                     val profile = result.data ?: kotlin.run {
                         _eventFlow.emit(UiEvent.Message(UiText.StringResource(R.string.error_couldnt_load_profile)))
@@ -95,7 +95,7 @@ class EditProfileViewModel @Inject constructor(
     }
     private fun updateProfile() {
         viewModelScope.launch {
-            val result = profileUseCases.updateProfileUseCase(
+            val result = profileUseCases.updateProfile(
                 updateProfileData = UpdateProfileData(
                     username = uiState.value.username,
                     bio = uiState.value.yourBio,
@@ -164,7 +164,7 @@ class EditProfileViewModel @Inject constructor(
                 )
             }
             is EditProfileEvent.SetSkillSelected -> {
-                val result = profileUseCases.setSkillSelectedUseCase(
+                val result = profileUseCases.setSkillSelected(
                     selectedSkills = uiState.value.selectedSkills,
                     event.skill
                 )

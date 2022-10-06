@@ -1,10 +1,13 @@
 package com.example.socialmedia.feature_profile.domain.di
 
+import android.content.SharedPreferences
+import com.example.socialmedia.feature_post.data.remote.PostApi
 import com.example.socialmedia.feature_profile.data.remote.ProfileApi
 import com.example.socialmedia.feature_profile.data.remote.ProfileApi.Companion.BASE_URL
 import com.example.socialmedia.feature_profile.data.repository.ProfileRepositoryImpl
 import com.example.socialmedia.feature_profile.domain.repository.ProfileRepository
 import com.example.socialmedia.feature_profile.domain.use_case.*
+import com.example.socialmedia.use_case.GetOwnUserIdUseCase
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -33,18 +36,25 @@ object ProfileModule {
 
     @Provides
     @Singleton
-    fun provideProfileRepository(api: ProfileApi, gson: Gson): ProfileRepository {
-        return ProfileRepositoryImpl(api,gson)
+    fun provideProfileRepository(profileApi: ProfileApi, gson: Gson, postApi: PostApi): ProfileRepository {
+        return ProfileRepositoryImpl(profileApi,postApi,gson)
     }
 
     @Provides
     @Singleton
     fun provideProfileUseCases(repository: ProfileRepository): ProfileUseCases {
         return ProfileUseCases(
-            getProfileUseCase = GetProfileUseCase(repository),
-            getSkillsUseCase = GetSkillsUseCase(repository),
-            updateProfileUseCase = UpdateProfileUseCase(repository),
-            setSkillSelectedUseCase = SetSkillSelectedUseCase()
+            getProfile = GetProfileUseCase(repository),
+            getSkills = GetSkillsUseCase(repository),
+            updateProfile = UpdateProfileUseCase(repository),
+            setSkillSelected = SetSkillSelectedUseCase(),
+            getPostsForProfile = GetPostsForProfileUseCase(repository)
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetOwnUserIdUseCase(sharedPreferences: SharedPreferences): GetOwnUserIdUseCase {
+        return GetOwnUserIdUseCase(sharedPreferences)
     }
 }

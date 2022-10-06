@@ -46,7 +46,7 @@ fun StandardScaffold(
             contentDescription = stringResource(id = R.string.chat)
         ),
         BottomNavItem(
-            route = ""
+            route = "-"
         ),
         BottomNavItem(
             route = Screen.SearchScreen.route,
@@ -76,7 +76,7 @@ fun StandardScaffold(
                         StandardButtonNavItem(
                             icon = bottomNavItem.icon,
                             contentDescription = bottomNavItem.contentDescription,
-                            selected = bottomNavItem.route == navController.currentDestination?.route,
+                            selected =navController.currentDestination?.route?.startsWith(bottomNavItem.route) == true,
                             alertCount = bottomNavItem.alertCount,
                             enabled = bottomNavItem.icon != null
                         ) {

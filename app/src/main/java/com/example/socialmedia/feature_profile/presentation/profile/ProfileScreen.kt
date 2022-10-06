@@ -5,10 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -17,7 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.socialmedia.domain.models.Post
 import com.example.socialmedia.domain.models.User
 import com.example.socialmedia.presentation.components.Post
@@ -33,11 +30,12 @@ fun ProfileScreen(
     onNavigate: (String) -> Unit = {},
     onNavigatePopBackStack: () -> Unit = {},
     viewModel: ProfileViewModel = hiltViewModel(),
-    userId: String
+    userId: String? = null
 ) {
     BackHandler {
         onNavigate(Screen.MainFeedScreen.route)
     }
+    val posts = viewModel.posts.collectAsLazyPagingItems()
     val context = LocalContext.current
     val state = rememberLazyGridState()
     val viewModelState = viewModel.state.value
@@ -116,12 +114,13 @@ fun ProfileScreen(
                 ) {
                     Spacer(modifier = Modifier.height(25.dp))
                 }
-                items(20) {
+                items(posts.itemCount) { post ->
                     Post(
                         post = Post(
-                            username = "Monica Gamage",
-                            likeCount = 523,
-                            commentCount = 523
+                            username = posts[post]?.username ?: "",
+                            likeCount = posts[post]?.likeCount ?: 0,
+                            commentCount = posts[post]?.commentCount ?: 0,
+                            imageUrl = posts[post]?.imageUrl ?: ""
                         ),
                         showProfileImage = false,
                         modifier = Modifier

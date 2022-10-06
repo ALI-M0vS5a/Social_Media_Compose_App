@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.example.socialmedia.feature_profile.domain.use_case.ProfileUseCases
+import com.example.socialmedia.use_case.GetOwnUserIdUseCase
 import com.example.socialmedia.util.Resource
 import com.example.socialmedia.util.UiEvent
 import com.example.socialmedia.util.UiText
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val profileUseCases: ProfileUseCases,
+    private val getOwnUserId: GetOwnUserIdUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -28,12 +31,17 @@ class ProfileViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    val posts = profileUseCases.getPostsForProfile(
+        savedStateHandle.get<String>("userId") ?: getOwnUserId()
+    ).cachedIn(viewModelScope)
 
-    init {
-        savedStateHandle.get<String>("userId")?.let { userId ->
-            getProfile(userId)
-        }
-    }
+//    init {
+//        savedStateHandle.get<String>("userId")?.let { userId ->
+//            getProfile(userId)
+//            val posts = profileUseCases.getPostsForProfile(userId)
+//                .cachedIn(viewModelScope)
+//        }
+//    }
 
     fun onEvent(event: ProfileEvent) {
         when (event) {
@@ -43,18 +51,17 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-     fun getProfile(userId: String) {
+     fun getProfile(userId: String?) {
         viewModelScope.launch {
             _state.value = state.value.copy(
                 isLoading = true
             )
-            when (val result = profileUseCases.getProfileUseCase(userId)) {
+            when (val result = profileUseCases.getProfile(userId ?: getOwnUserId())) {
                 is Resource.Success -> {
                     _state.value = state.value.copy(
                         profile = result.data,
                         isLoading = false
                     )
-                    println("Success")
                 }
                 is Resource.Error -> {
                     _state.value = state.value.copy(
