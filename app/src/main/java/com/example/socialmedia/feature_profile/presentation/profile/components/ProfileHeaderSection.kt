@@ -22,6 +22,7 @@ fun ProfileHeaderSection(
     user: User,
     modifier: Modifier = Modifier,
     isOwnProfile: Boolean = true,
+    isFollowing: Boolean,
     onEditButtonClick: () -> Unit = {}
 ) {
     Column(
@@ -44,7 +45,8 @@ fun ProfileHeaderSection(
             isOwnProfile = isOwnProfile,
             onEditButtonClick = {
                 onEditButtonClick()
-            }
+            },
+            isFollowing = isFollowing
         )
     }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.socialmedia.feature_profile.domain.use_case.ProfileUseCases
 import com.example.socialmedia.use_case.GetOwnUserIdUseCase
 import com.example.socialmedia.util.Resource
@@ -14,6 +15,7 @@ import com.example.socialmedia.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,17 +33,18 @@ class ProfileViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    val posts = profileUseCases.getPostsForProfile(
-        savedStateHandle.get<String>("userId") ?: getOwnUserId()
-    ).cachedIn(viewModelScope)
+    val posts = flow(savedStateHandle)
 
-//    init {
-//        savedStateHandle.get<String>("userId")?.let { userId ->
-//            getProfile(userId)
-//            val posts = profileUseCases.getPostsForProfile(userId)
-//                .cachedIn(viewModelScope)
-//        }
-//    }
+    private fun flow(savedStateHandle: SavedStateHandle) =
+        profileUseCases.getPostsForProfile(
+            savedStateHandle.get<String>("userId") ?: getOwnUserId()
+        ).cachedIn(viewModelScope)
+
+    init {
+        savedStateHandle.get<String>("userId")?.let { userId ->
+            getProfile(userId)
+        }
+    }
 
     fun onEvent(event: ProfileEvent) {
         when (event) {
@@ -51,13 +54,14 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-     fun getProfile(userId: String?) {
+    fun getProfile(userId: String?) {
         viewModelScope.launch {
             _state.value = state.value.copy(
                 isLoading = true
             )
             when (val result = profileUseCases.getProfile(userId ?: getOwnUserId())) {
                 is Resource.Success -> {
+                    println("userId is from getProfile ${result.data?.userId}")
                     _state.value = state.value.copy(
                         profile = result.data,
                         isLoading = false

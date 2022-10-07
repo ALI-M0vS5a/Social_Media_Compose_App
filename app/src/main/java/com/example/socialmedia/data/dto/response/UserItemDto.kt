@@ -1,9 +1,9 @@
-package com.example.socialmedia.feature_profile.data.remote.response
+package com.example.socialmedia.data.dto.response
 
-import com.example.socialmedia.feature_profile.domain.model.UserItem
+import com.example.socialmedia.domain.models.UserItem
 
 
-data class UserResponseItem(
+data class UserItemDto(
     val userId: String,
     val username: String,
     val profilePictureUrl: String,

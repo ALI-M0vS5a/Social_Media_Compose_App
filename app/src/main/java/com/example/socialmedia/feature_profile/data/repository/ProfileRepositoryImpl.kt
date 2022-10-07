@@ -7,9 +7,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.socialmedia.R
 import com.example.socialmedia.domain.models.Post
+import com.example.socialmedia.domain.models.UserItem
 import com.example.socialmedia.feature_post.data.paging.PostSource
 import com.example.socialmedia.feature_post.data.remote.PostApi
 import com.example.socialmedia.feature_profile.data.remote.ProfileApi
+import com.example.socialmedia.feature_profile.data.remote.request.FollowUpdateRequest
 import com.example.socialmedia.feature_profile.domain.model.Profile
 import com.example.socialmedia.feature_profile.domain.model.Skill
 import com.example.socialmedia.feature_profile.domain.model.UpdateProfileData
@@ -135,5 +137,80 @@ class ProfileRepositoryImpl(
         return Pager(PagingConfig(pageSize = Constants.PAGE_SIZE_POSTS)) {
             PostSource(postApi,PostSource.Source.Profile(userId))
         }.flow
+    }
+
+    override suspend fun followUser(userId: String): SimpleResource {
+        return try {
+            val response = profileApi.followUser(
+                request = FollowUpdateRequest(userId)
+            )
+            if(response.successful) {
+                Resource.Success(Unit)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(UiText.DynamicString(msg))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        } catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
+    }
+
+    override suspend fun unfollowUser(userId: String): SimpleResource {
+        return try {
+            val response = profileApi.unfollowUser(
+                userId = userId
+            )
+            if(response.successful) {
+                Resource.Success(Unit)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(UiText.DynamicString(msg))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        } catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
+    }
+
+    override suspend fun searchUser(query: String): Resource<List<UserItem>> {
+        return try {
+            val response = profileApi.searchUser(query)
+            Resource.Success(
+                data = response.map { it.toUserItem() }
+            )
+        } catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
     }
 }

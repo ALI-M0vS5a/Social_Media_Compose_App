@@ -110,7 +110,8 @@ fun MainFeedScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(303.dp)
-                            .padding(horizontal = 41.dp)
+                            .padding(horizontal = 41.dp),
+                        showProfileImage = true
                     ) {
                       onNavigate(Screen.PostDetailScreen.route)
                     }

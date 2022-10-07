@@ -18,7 +18,7 @@ import com.example.socialmedia.feature_profile.presentation.profile.ProfileScree
 import com.example.socialmedia.presentation.activity.ActivityScreen
 import com.example.socialmedia.presentation.chat.ChatScreen
 import com.example.socialmedia.presentation.onboarding.OnBoardingScreen
-import com.example.socialmedia.presentation.search.SearchScreen
+import com.example.socialmedia.feature_profile.presentation.search.SearchScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 @ExperimentalMotionApi

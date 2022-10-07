@@ -13,14 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.socialmedia.R
 import com.example.socialmedia.domain.models.User
-import com.example.socialmedia.presentation.ui.theme.Shapes
+
 
 @ExperimentalMaterial3Api
 @Composable
@@ -31,6 +33,7 @@ fun UserProfileItem(
     onItemClick: () -> Unit = {},
     onActionItemClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -52,7 +55,12 @@ fun UserProfileItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.profile_pic),
+                painter = rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(context)
+                        .data(user.profilePictureUrl)
+                        .crossfade(true)
+                        .build()
+                ),
                 contentDescription = stringResource(id = R.string.profile_pic),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

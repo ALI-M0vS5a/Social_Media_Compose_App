@@ -1,4 +1,4 @@
-package com.example.socialmedia.feature_profile.domain.model
+package com.example.socialmedia.domain.models
 
 
 data class UserItem(

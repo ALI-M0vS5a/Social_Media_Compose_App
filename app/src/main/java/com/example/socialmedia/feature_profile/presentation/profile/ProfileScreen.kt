@@ -77,7 +77,7 @@ fun ProfileScreen(
                     followerCount = profile.followerCount,
                     postCount = profile.postCount
                 ),
-                isOwnProfile = true,
+                isOwnProfile = profile.isOwnProfile,
                 progress = progress,
                 onNavigate = onNavigate
             )
@@ -106,7 +106,8 @@ fun ProfileScreen(
                         onEditButtonClick = {
                             onNavigate(Screen.EditProfileScreen.route + "/${profile.userId}")
                         },
-                        isOwnProfile = profile.isOwnProfile
+                        isOwnProfile = profile.isOwnProfile,
+                        isFollowing = profile.isFollowing
                     )
                 }
                 item(
@@ -114,7 +115,8 @@ fun ProfileScreen(
                 ) {
                     Spacer(modifier = Modifier.height(25.dp))
                 }
-                items(posts.itemCount) { post ->
+
+                items(posts.itemSnapshotList.size) { post ->
                     Post(
                         post = Post(
                             username = posts[post]?.username ?: "",

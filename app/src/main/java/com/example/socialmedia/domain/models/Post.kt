@@ -8,5 +8,4 @@ data class Post(
     val description: String? = null,
     val likeCount: Int,
     val commentCount: Int
-
 )

@@ -8,12 +8,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Message
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -23,8 +22,6 @@ import androidx.navigation.NavController
 import com.example.socialmedia.R
 import com.example.socialmedia.domain.models.BottomNavItem
 import com.example.socialmedia.presentation.util.Screen
-import com.google.accompanist.systemuicontroller.SystemUiController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
 @Composable
@@ -50,7 +47,7 @@ fun StandardScaffold(
         ),
         BottomNavItem(
             route = Screen.SearchScreen.route,
-            icon = Icons.Default.Favorite,
+            icon = Icons.Default.Search,
             contentDescription = stringResource(id = R.string.favorite)
         ),
         BottomNavItem(
