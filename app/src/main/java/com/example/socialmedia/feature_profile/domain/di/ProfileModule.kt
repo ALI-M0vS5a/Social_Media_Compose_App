@@ -3,11 +3,11 @@ package com.example.socialmedia.feature_profile.domain.di
 import android.content.SharedPreferences
 import com.example.socialmedia.feature_post.data.remote.PostApi
 import com.example.socialmedia.feature_profile.data.remote.ProfileApi
-import com.example.socialmedia.feature_profile.data.remote.ProfileApi.Companion.BASE_URL
 import com.example.socialmedia.feature_profile.data.repository.ProfileRepositoryImpl
 import com.example.socialmedia.feature_profile.domain.repository.ProfileRepository
 import com.example.socialmedia.feature_profile.domain.use_case.*
 import com.example.socialmedia.use_case.GetOwnUserIdUseCase
+import com.example.socialmedia.util.BaseUrl.Companion.BASE_URL
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides

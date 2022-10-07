@@ -15,7 +15,7 @@ import com.example.socialmedia.feature_post.presentation.main_feed.MainFeedScree
 import com.example.socialmedia.feature_post.presentation.post_detail.PostDetailScreen
 import com.example.socialmedia.feature_profile.presentation.edit_profile.EditProfileScreen
 import com.example.socialmedia.feature_profile.presentation.profile.ProfileScreen
-import com.example.socialmedia.presentation.activity.ActivityScreen
+import com.example.socialmedia.feature_activity.presentation.ActivityScreen
 import com.example.socialmedia.presentation.chat.ChatScreen
 import com.example.socialmedia.presentation.onboarding.OnBoardingScreen
 import com.example.socialmedia.feature_profile.presentation.search.SearchScreen

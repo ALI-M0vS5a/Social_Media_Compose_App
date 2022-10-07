@@ -50,8 +50,4 @@ interface ProfileApi {
         @Query("userId") userId: String
     ): BasicApiResponse<Unit>
 
-
-    companion object {
-        const val BASE_URL = "http://192.168.0.100:8081/"
-    }
 }

@@ -6,6 +6,7 @@ import com.example.socialmedia.feature_post.domian.repository.PostRepository
 import com.example.socialmedia.feature_post.domian.use_case.CreatePostUseCase
 import com.example.socialmedia.feature_post.domian.use_case.GetPostsForFollowsUseCase
 import com.example.socialmedia.feature_post.domian.use_case.PostUseCases
+import com.example.socialmedia.util.BaseUrl.Companion.BASE_URL
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -26,7 +27,7 @@ object PostModule {
     fun providePostApi(client: OkHttpClient): PostApi {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(PostApi.BASE_URL)
+            .baseUrl(BASE_URL)
             .client(client)
             .build()
             .create(PostApi::class.java)

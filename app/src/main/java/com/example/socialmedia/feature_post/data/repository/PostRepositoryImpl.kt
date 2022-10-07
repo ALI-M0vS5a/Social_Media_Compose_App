@@ -31,7 +31,7 @@ class PostRepositoryImpl(
     private val gson: Gson
 ) : PostRepository {
     override val posts: Flow<PagingData<Post>>
-        get() = Pager(PagingConfig(pageSize = Constants.PAGE_SIZE_POSTS)) {
+        get() = Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)) {
             PostSource(api, PostSource.Source.Follows)
         }.flow
 

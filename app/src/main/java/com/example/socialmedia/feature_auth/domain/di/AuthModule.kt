@@ -2,12 +2,12 @@ package com.example.socialmedia.feature_auth.domain.di
 
 import android.content.SharedPreferences
 import com.example.socialmedia.feature_auth.data.remote.AuthApi
-import com.example.socialmedia.feature_auth.data.remote.AuthApi.Companion.BASE_URL
 import com.example.socialmedia.feature_auth.data.repository.AuthRepositoryImpl
 import com.example.socialmedia.feature_auth.domain.repository.AuthRepository
 import com.example.socialmedia.feature_auth.domain.use_case.AuthenticateUseCase
 import com.example.socialmedia.feature_auth.domain.use_case.LoginUseCase
 import com.example.socialmedia.feature_auth.domain.use_case.RegisterUseCase
+import com.example.socialmedia.util.BaseUrl.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
