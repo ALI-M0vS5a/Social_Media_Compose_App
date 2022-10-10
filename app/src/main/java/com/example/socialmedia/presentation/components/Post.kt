@@ -20,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -35,8 +34,11 @@ import com.example.socialmedia.domain.models.Post
 fun Post(
     modifier: Modifier = Modifier,
     post: Post,
-    showProfileImage: Boolean,
-    onPostClick: () -> Unit = {}
+    showProfileImage: Boolean = true,
+    onPostClick: () -> Unit = {},
+    onLikeClick: () -> Unit,
+    onCommentClick: () -> Unit,
+    onShareClick: () -> Unit
 
 ) {
     val context = LocalContext.current
@@ -56,7 +58,7 @@ fun Post(
                 .clip(RoundedCornerShape(26.dp)),
             contentScale = ContentScale.Crop
         )
-        if(showProfileImage){
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -67,25 +69,19 @@ fun Post(
                         onPostClick()
                     }
             ) {
+                if(showProfileImage){
                 TopPostSection(
                     modifier = Modifier
                         .padding(15.dp),
-                    post = post,
-                    showProfileImage = showProfileImage
+                    post = post
                 )
                 EngagementsButtonPostSection(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 15.dp),
-                    onLikeClick = { isLiked ->
-
-                    },
-                    onCommentClick = {
-
-                    },
-                    onShareClick = {
-
-                    },
+                    onLikeClick = onLikeClick,
+                    onCommentClick = onCommentClick,
+                    onShareClick = onShareClick,
                     post = post
                 )
             }
@@ -97,8 +93,7 @@ fun Post(
 @Composable
 fun TopPostSection(
     modifier: Modifier = Modifier,
-    post: Post,
-    showProfileImage: Boolean
+    post: Post
 ) {
     Row(
         modifier = modifier
@@ -110,8 +105,7 @@ fun TopPostSection(
             onUsernameClick = { username ->
 
             },
-            post = post,
-            showProfileImage = showProfileImage
+            post = post
         )
         Icon(
             imageVector = Icons.Filled.MoreVert,
@@ -125,7 +119,6 @@ fun TopPostSection(
 fun ProfileImageAndTitle(
     modifier: Modifier = Modifier,
     onUsernameClick: (String) -> Unit = {},
-    showProfileImage: Boolean,
     post: Post
 ) {
     Row(
@@ -140,9 +133,13 @@ fun ProfileImageAndTitle(
                     color = Color(android.graphics.Color.parseColor("#8CDCE1"))
                 )
         ) {
-            if(showProfileImage){
                 Image(
-                    painter = painterResource(id = R.drawable.profile_pic),
+                    painter = rememberAsyncImagePainter(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(post.profilePictureUrl)
+                            .crossfade(true)
+                            .build()
+                    ),
                     contentDescription = stringResource(id = R.string.profile_pic),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -151,7 +148,6 @@ fun ProfileImageAndTitle(
                         .align(Alignment.Center)
 
                 )
-            }
         }
         Spacer(modifier = Modifier.width(9.dp))
         Column(
@@ -172,7 +168,7 @@ fun ProfileImageAndTitle(
             )
             Spacer(modifier = Modifier.height(1.dp))
             Text(
-                text = stringResource(id = R.string.profile_pic_time),
+                text = post.username,
                 fontWeight = FontWeight(400),
                 lineHeight = 15.sp,
                 fontSize = 10.sp,
@@ -187,7 +183,7 @@ fun ProfileImageAndTitle(
 fun EngagementsButtonPostSection(
     modifier: Modifier = Modifier,
     isLiked: Boolean = false,
-    onLikeClick: (Boolean) -> Unit = {},
+    onLikeClick: () -> Unit = {},
     onCommentClick: () -> Unit = {},
     onShareClick: () -> Unit = {},
     post: Post
@@ -210,6 +206,9 @@ fun EngagementsButtonPostSection(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable {
+                        onLikeClick()
+                    }
                     .align(Alignment.Center),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -224,7 +223,7 @@ fun EngagementsButtonPostSection(
                     modifier = Modifier
                         .size(14.dp)
                         .clickable {
-                            onLikeClick(!isLiked)
+                            onLikeClick()
                         },
                     tint = if(isLiked){
                         Color.Red

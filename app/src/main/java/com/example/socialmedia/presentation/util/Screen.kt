@@ -13,4 +13,5 @@ sealed class Screen(val route: String) {
     object ActivityScreen : Screen("activity_screen")
     object EditProfileScreen : Screen("edit_profile_screen")
     object SearchScreen : Screen("search_screen")
+    object PersonListScreen : Screen("person_list_screen")
 }

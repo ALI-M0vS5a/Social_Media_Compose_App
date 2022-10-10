@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.example.socialmedia.util.Constants
+import com.example.socialmedia.util.DefaultPostLiker
+import com.example.socialmedia.util.PostLiker
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -44,5 +46,11 @@ object AppModule {
     @Singleton
     fun provideGson(): Gson {
         return Gson()
+    }
+
+    @Provides
+    @Singleton
+    fun providePostLiker(): PostLiker {
+        return DefaultPostLiker()
     }
 }

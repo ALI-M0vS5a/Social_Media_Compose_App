@@ -7,14 +7,13 @@ import androidx.activity.result.contract.ActivityResultContract
 import com.example.socialmedia.feature_post.util.getFileName
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCrop.RESULT_ERROR
-import com.yalantis.ucrop.model.AspectRatio
 import java.io.File
 
 
 class CropActivityResultContract(
     private val aspectRatioX: Float,
     private val aspectRatioY: Float
-): ActivityResultContract<Uri, Uri?>() {
+) : ActivityResultContract<Uri, Uri?>() {
     override fun createIntent(context: Context, input: Uri): Intent {
         return UCrop.of(
             input,
@@ -25,7 +24,7 @@ class CropActivityResultContract(
                 )
             )
         )
-            .withAspectRatio(aspectRatioX,aspectRatioY)
+            .withAspectRatio(aspectRatioX, aspectRatioY)
             .getIntent(context)
     }
 
@@ -34,10 +33,10 @@ class CropActivityResultContract(
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
-        if(intent == null) {
+        if (intent == null) {
             return null
         }
-        if(resultCode == RESULT_ERROR) {
+        if (resultCode == RESULT_ERROR) {
             val error = UCrop.getError(intent)
             error?.printStackTrace()
         }

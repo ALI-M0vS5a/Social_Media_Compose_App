@@ -2,13 +2,9 @@ package com.example.socialmedia.feature_profile.data.repository
 
 import android.net.Uri
 import androidx.core.net.toFile
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.example.socialmedia.R
 import com.example.socialmedia.domain.models.Post
 import com.example.socialmedia.domain.models.UserItem
-import com.example.socialmedia.feature_post.data.paging.PostSource
 import com.example.socialmedia.feature_post.data.remote.PostApi
 import com.example.socialmedia.feature_profile.data.remote.ProfileApi
 import com.example.socialmedia.feature_profile.data.remote.request.FollowUpdateRequest
@@ -16,12 +12,10 @@ import com.example.socialmedia.feature_profile.domain.model.Profile
 import com.example.socialmedia.feature_profile.domain.model.Skill
 import com.example.socialmedia.feature_profile.domain.model.UpdateProfileData
 import com.example.socialmedia.feature_profile.domain.repository.ProfileRepository
-import com.example.socialmedia.util.Constants
 import com.example.socialmedia.util.Resource
 import com.example.socialmedia.util.SimpleResource
 import com.example.socialmedia.util.UiText
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
@@ -133,10 +127,31 @@ class ProfileRepositoryImpl(
         }
     }
 
-    override  fun getPostsPaged(userId: String): Flow<PagingData<Post>> {
-        return Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)) {
-            PostSource(postApi,PostSource.Source.Profile(userId))
-        }.flow
+    override suspend fun getPostsPaged(
+        page: Int,
+        pageSize: Int,
+        userId: String
+    ): Resource<List<Post>> {
+        return try {
+            val posts = postApi.getPostsForProfile(
+                userId = userId,
+                page = page,
+                pageSize = pageSize
+            )
+            Resource.Success(data = posts)
+        }  catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
     }
 
     override suspend fun followUser(userId: String): SimpleResource {

@@ -7,10 +7,14 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.socialmedia.R
+import com.example.socialmedia.domain.models.Comment
 import com.example.socialmedia.domain.models.Post
-import com.example.socialmedia.feature_post.data.remote.PostApi
-import com.example.socialmedia.feature_post.data.remote.request.CreatePostRequest
+import com.example.socialmedia.domain.models.UserItem
 import com.example.socialmedia.feature_post.data.paging.PostSource
+import com.example.socialmedia.feature_post.data.remote.PostApi
+import com.example.socialmedia.feature_post.data.remote.request.CreateCommentRequest
+import com.example.socialmedia.feature_post.data.remote.request.CreatePostRequest
+import com.example.socialmedia.feature_post.data.remote.request.LikeUpdateRequest
 import com.example.socialmedia.feature_post.domian.repository.PostRepository
 import com.example.socialmedia.util.Constants
 import com.example.socialmedia.util.Resource
@@ -30,10 +34,28 @@ class PostRepositoryImpl(
     private val api: PostApi,
     private val gson: Gson
 ) : PostRepository {
-    override val posts: Flow<PagingData<Post>>
-        get() = Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)) {
-            PostSource(api, PostSource.Source.Follows)
-        }.flow
+
+    override suspend fun getPostsForFollows(page: Int, pageSize: Int): Resource<List<Post>> {
+        return try {
+            val posts = api.getPostsForFollows(
+                page = page,
+                pageSize = pageSize
+            )
+            Resource.Success(data = posts)
+        } catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
+    }
 
     override suspend fun createPost(
         description: String,
@@ -51,7 +73,7 @@ class PostRepositoryImpl(
 //                inputStream.copyTo(outputStream)
 //                file
 //            }
-        imageUri.toFile()
+            imageUri.toFile()
         } ?: return Resource.Error(
             message = UiText.StringResource(R.string.error_file_not_found)
         )
@@ -76,6 +98,161 @@ class PostRepositoryImpl(
                     Resource.Error(UiText.DynamicString(msg))
                 } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
             }
+        } catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
+    }
+
+    override suspend fun getPostDetails(postId: String): Resource<Post> {
+        return try {
+            val response = api.getPostDetails(postId)
+            if (response.successful) {
+                Resource.Success(response.data)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(UiText.DynamicString(msg))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        } catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
+    }
+
+    override suspend fun getCommentsForPost(postId: String): Resource<List<Comment>> {
+        return try {
+            val comments = api.getCommentsForPost(postId = postId).map {
+                it.toComment()
+            }
+            Resource.Success(comments)
+        } catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
+    }
+
+    override suspend fun createComment(postId: String, comment: String): SimpleResource {
+        return try {
+            val response = api.createComment(
+                CreateCommentRequest(
+                    comment = comment,
+                    postId = postId
+                )
+            )
+            if (response.successful) {
+                Resource.Success(response.data)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(UiText.DynamicString(msg))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        } catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
+    }
+
+    override suspend fun likeParent(parentId: String, parentType: Int): SimpleResource {
+        return try {
+            val response = api.likeParent(
+                LikeUpdateRequest(
+                    parentId = parentId,
+                    parentType = parentType
+                )
+            )
+            if(response.successful) {
+                Resource.Success(response.data)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(UiText.DynamicString(msg))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        }  catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
+    }
+
+    override suspend fun unlikeParent(parentId: String, parentType: Int): SimpleResource {
+        return try {
+            val response = api.unlikeParent(
+                    parentId = parentId,
+                    parentType = parentType
+            )
+            if(response.successful) {
+                Resource.Success(response.data)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(UiText.DynamicString(msg))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        }  catch (e: IOException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.please_check_your_connection
+                )
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = UiText.StringResource(
+                    resId = R.string.Oops_something_went_wrong
+                )
+            )
+        }
+    }
+
+    override suspend fun getLikesForParent(parentId: String): Resource<List<UserItem>> {
+        return try {
+            val response = api.getLikesForParent(
+                parentId = parentId,
+            )
+            Resource.Success(response.map { it.toUserItem() })
         } catch (e: IOException) {
             Resource.Error(
                 message = UiText.StringResource(

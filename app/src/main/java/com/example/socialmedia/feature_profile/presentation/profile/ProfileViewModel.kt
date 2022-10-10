@@ -5,17 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.socialmedia.domain.models.Post
 import com.example.socialmedia.feature_profile.domain.use_case.ProfileUseCases
 import com.example.socialmedia.use_case.GetOwnUserIdUseCase
-import com.example.socialmedia.util.Resource
-import com.example.socialmedia.util.UiEvent
-import com.example.socialmedia.util.UiText
+import com.example.socialmedia.util.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,25 +20,52 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val profileUseCases: ProfileUseCases,
     private val getOwnUserId: GetOwnUserIdUseCase,
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _state = mutableStateOf(ProfileState())
     val state: State<ProfileState> = _state
 
-    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    private val _eventFlow = MutableSharedFlow<Event>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    val posts = flow(savedStateHandle)
 
-    private fun flow(savedStateHandle: SavedStateHandle) =
-        profileUseCases.getPostsForProfile(
-            savedStateHandle.get<String>("userId") ?: getOwnUserId()
-        ).cachedIn(viewModelScope)
+
+    private val _pagingState = mutableStateOf<PostPagingState<Post>>(PostPagingState())
+    val pagingState: State<PostPagingState<Post>> = _pagingState
+
+    private val paging = DefaultPaging(
+        onLoadUpdated = { isLoading ->
+            _pagingState.value = pagingState.value.copy(
+                isLoading = isLoading
+            )
+        },
+        onRequest = { page ->
+            val userId = savedStateHandle.get<String>("userId") ?: getOwnUserId()
+            profileUseCases.getPostsForProfile(
+                userId = userId,
+                page = page
+            )
+        },
+        onSuccess = { posts ->
+            _pagingState.value = pagingState.value.copy(
+                items = pagingState.value.items + posts,
+                endReached = posts.isEmpty(),
+                isLoading = false
+            )
+        },
+        onError = { uiText ->
+            _eventFlow.emit(UiEvent.Message(uiText))
+        }
+    )
 
     init {
-        savedStateHandle.get<String>("userId")?.let { userId ->
-            getProfile(userId)
+        loadNextPosts()
+    }
+
+    fun loadNextPosts() {
+        viewModelScope.launch {
+            paging.loadNextItems()
         }
     }
 

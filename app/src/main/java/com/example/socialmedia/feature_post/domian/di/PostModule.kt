@@ -3,9 +3,7 @@ package com.example.socialmedia.feature_post.domian.di
 import com.example.socialmedia.feature_post.data.remote.PostApi
 import com.example.socialmedia.feature_post.data.repository.PostRepositoryImpl
 import com.example.socialmedia.feature_post.domian.repository.PostRepository
-import com.example.socialmedia.feature_post.domian.use_case.CreatePostUseCase
-import com.example.socialmedia.feature_post.domian.use_case.GetPostsForFollowsUseCase
-import com.example.socialmedia.feature_post.domian.use_case.PostUseCases
+import com.example.socialmedia.feature_post.domian.use_case.*
 import com.example.socialmedia.util.BaseUrl.Companion.BASE_URL
 import com.google.gson.Gson
 import dagger.Module
@@ -46,8 +44,13 @@ object PostModule {
     @Singleton
     fun providePostUseCases(repository: PostRepository): PostUseCases {
         return PostUseCases(
-            getPostsForFollowsUseCase = GetPostsForFollowsUseCase(repository),
-            createPostUseCase = CreatePostUseCase(repository)
+            getPostsForFollows = GetPostsForFollowsUseCase(repository),
+            createPostUseCase = CreatePostUseCase(repository),
+            getPostDetails = GetPostDetailsUseCase(repository),
+            getCommentsForPost = GetCommentsForPostUseCase(repository),
+            createComment = CreateCommentUseCase(repository),
+            toggleLikeForParent = ToggleLikeForParentUseCase(repository),
+            getLikesForParent = GetLikesForParentUseCase(repository)
         )
     }
 }

@@ -16,6 +16,7 @@ import com.example.socialmedia.feature_post.presentation.post_detail.PostDetailS
 import com.example.socialmedia.feature_profile.presentation.edit_profile.EditProfileScreen
 import com.example.socialmedia.feature_profile.presentation.profile.ProfileScreen
 import com.example.socialmedia.feature_activity.presentation.ActivityScreen
+import com.example.socialmedia.feature_profile.presentation.person_list.PersonListScreen
 import com.example.socialmedia.presentation.chat.ChatScreen
 import com.example.socialmedia.presentation.onboarding.OnBoardingScreen
 import com.example.socialmedia.feature_profile.presentation.search.SearchScreen
@@ -89,13 +90,24 @@ fun Navigation(
                 onNavigate = navController::navigate
             )
         }
-        composable(route = Screen.PostDetailScreen.route) {
+        composable(
+            route = Screen.PostDetailScreen.route + "/{postId}",
+            arguments = listOf(
+                navArgument(
+                    name = "postId"
+                ) {
+                    type = NavType.StringType
+                }
+            )
+        ) {
             PostDetailScreen(
+                onNavigate = navController::navigate,
                 onNavigatePopBackStack = navController::popBackStack
             )
         }
         composable(route = Screen.ActivityScreen.route) {
             ActivityScreen(
+                onNavigate = navController::navigate,
                 onNavigatePopBackStack = navController::popBackStack
             )
         }
@@ -110,6 +122,19 @@ fun Navigation(
             EditProfileScreen(
                 onNavigate = navController::navigate,
                 onNavigatePopBackStack = navController::popBackStack
+            )
+        }
+
+        composable(
+            route = Screen.PersonListScreen.route + "/{parentId}",
+            arguments = listOf(
+                navArgument(name = "parentId") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            PersonListScreen(
+                onNavigate = navController::navigate
             )
         }
     }

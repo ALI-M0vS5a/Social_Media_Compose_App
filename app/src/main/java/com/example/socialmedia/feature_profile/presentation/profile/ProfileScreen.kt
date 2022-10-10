@@ -14,9 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.socialmedia.domain.models.Post
 import com.example.socialmedia.domain.models.User
+import com.example.socialmedia.feature_post.presentation.util.PostEvent
 import com.example.socialmedia.presentation.components.Post
 import com.example.socialmedia.feature_profile.presentation.profile.components.MotionLayoutProfileHeader
 import com.example.socialmedia.feature_profile.presentation.profile.components.ProfileHeaderSection
@@ -35,7 +34,7 @@ fun ProfileScreen(
     BackHandler {
         onNavigate(Screen.MainFeedScreen.route)
     }
-    val posts = viewModel.posts.collectAsLazyPagingItems()
+    val pagingState = viewModel.pagingState.value
     val context = LocalContext.current
     val state = rememberLazyGridState()
     val viewModelState = viewModel.state.value
@@ -56,7 +55,9 @@ fun ProfileScreen(
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                else -> Unit
+                is PostEvent.OnLiked -> {
+
+                }
             }
         }
     }
@@ -116,19 +117,30 @@ fun ProfileScreen(
                     Spacer(modifier = Modifier.height(25.dp))
                 }
 
-                items(posts.itemSnapshotList.size) { post ->
+                items(pagingState.items.size) { i ->
+                    val post = pagingState.items[i]
+                    if(i > pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading ) {
+                        viewModel.loadNextPosts()
+                    }
                     Post(
-                        post = Post(
-                            username = posts[post]?.username ?: "",
-                            likeCount = posts[post]?.likeCount ?: 0,
-                            commentCount = posts[post]?.commentCount ?: 0,
-                            imageUrl = posts[post]?.imageUrl ?: ""
-                        ),
+                        post = post,
                         showProfileImage = false,
                         modifier = Modifier
                             .padding(8.dp)
                             .aspectRatio(1f)
-                            .clip(RoundedCornerShape(5.dp))
+                            .clip(RoundedCornerShape(5.dp)),
+                        onPostClick = {
+                            onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
+                        },
+                        onShareClick = {
+
+                        },
+                        onCommentClick = {
+
+                        },
+                        onLikeClick = {
+
+                        }
                     )
                 }
             }
