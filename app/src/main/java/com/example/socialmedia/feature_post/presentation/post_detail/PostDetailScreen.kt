@@ -1,6 +1,7 @@
 package com.example.socialmedia.feature_post.presentation.post_detail
 
 
+
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,11 +20,14 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -36,6 +40,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.socialmedia.R
 import com.example.socialmedia.feature_post.presentation.post_detail.components.CommentItem
+import com.example.socialmedia.feature_post.presentation.util.showKeyBoard
 import com.example.socialmedia.presentation.components.StandardTopBar
 import com.example.socialmedia.presentation.util.Screen
 import com.example.socialmedia.util.UiEvent
@@ -46,10 +51,20 @@ import kotlinx.coroutines.flow.collectLatest
 fun PostDetailScreen(
     onNavigate: (String) -> Unit = {},
     onNavigatePopBackStack: () -> Unit = {},
-    viewModel: PostDetailViewModel = hiltViewModel()
+    viewModel: PostDetailViewModel = hiltViewModel(),
+    shouldShowKeyBoard: Boolean = false
 ) {
     val state = viewModel.uiState.value
     val context = LocalContext.current
+    val focusRequester = remember {
+        FocusRequester()
+    }
+    LaunchedEffect(key1 = true) {
+        if(shouldShowKeyBoard) {
+            context.showKeyBoard()
+            focusRequester.requestFocus()
+        }
+    }
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
@@ -168,7 +183,8 @@ fun PostDetailScreen(
                         EngagementsBottomPost(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            onNavigate = onNavigate
+                            onNavigate = onNavigate,
+                            focusRequester = focusRequester
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
@@ -237,7 +253,8 @@ fun PostDetailScreen(
                         unfocusedIndicatorColor = Color.White
                     ),
                     modifier = Modifier
-                        .align(Alignment.CenterStart),
+                        .align(Alignment.CenterStart)
+                        .focusRequester(focusRequester = focusRequester),
                     placeholder = {
                         Text(text = stringResource(id = R.string.add_comment))
                     }
@@ -350,9 +367,11 @@ fun TopPostSection(
 fun EngagementsBottomPost(
     modifier: Modifier = Modifier,
     onNavigate: (String) -> Unit,
-    viewModel: PostDetailViewModel = hiltViewModel()
+    viewModel: PostDetailViewModel = hiltViewModel(),
+    focusRequester: FocusRequester = FocusRequester()
 ) {
     val state = viewModel.uiState.value
+    val context = LocalContext.current
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -363,7 +382,13 @@ fun EngagementsBottomPost(
                 .wrapContentWidth()
                 .wrapContentHeight()
         ) {
-            Row {
+            Row(
+                modifier = Modifier
+                    .clickable {
+                        context.showKeyBoard()
+                        focusRequester.requestFocus()
+                    }
+            ) {
                 Text(
                     text = "20",
                     fontWeight = FontWeight(400),

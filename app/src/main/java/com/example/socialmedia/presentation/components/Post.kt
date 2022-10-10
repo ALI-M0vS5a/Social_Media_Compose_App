@@ -38,7 +38,8 @@ fun Post(
     onPostClick: () -> Unit = {},
     onLikeClick: () -> Unit,
     onCommentClick: () -> Unit,
-    onShareClick: () -> Unit
+    onShareClick: () -> Unit,
+    isLiked: Boolean = false
 
 ) {
     val context = LocalContext.current
@@ -82,7 +83,8 @@ fun Post(
                     onLikeClick = onLikeClick,
                     onCommentClick = onCommentClick,
                     onShareClick = onShareClick,
-                    post = post
+                    post = post,
+                    isLiked = isLiked
                 )
             }
         }
@@ -168,7 +170,7 @@ fun ProfileImageAndTitle(
             )
             Spacer(modifier = Modifier.height(1.dp))
             Text(
-                text = post.username,
+                text = "",
                 fontWeight = FontWeight(400),
                 lineHeight = 15.sp,
                 fontSize = 10.sp,
@@ -322,8 +324,3 @@ fun EngagementsButtonPostSection(
     }
 }
 
-//@Preview
-//@Composable
-//fun PostPreview() {
-//    Post()
-//}

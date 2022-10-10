@@ -102,7 +102,7 @@ fun MainFeedScreen(
         Spacer(modifier = Modifier.height(10.dp))
         Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(
-                contentPadding = PaddingValues(bottom = 100.dp)
+                contentPadding = PaddingValues(bottom = 110.dp)
             ) {
                 items(pagingState.items.size) { i ->
                     val post = pagingState.items[i]
@@ -110,17 +110,7 @@ fun MainFeedScreen(
                         viewModel.loadNextPosts()
                     }
                     Post(
-                        post = Post(
-                            id = post.id,
-                            userId = post.userId,
-                            username = "",
-                            imageUrl = post.imageUrl,
-                            profilePictureUrl = post.profilePictureUrl,
-                            description = post.description,
-                            likeCount = post.likeCount ,
-                            commentCount = post.commentCount,
-                            isLiked = post.isLiked
-                        ),
+                        post = post,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(303.dp)
@@ -130,23 +120,24 @@ fun MainFeedScreen(
                             viewModel.onEvents(MainFeedEvents.LikedPost(post.id))
                         },
                         onCommentClick = {
-
+                            onNavigate(Screen.PostDetailScreen.route + "/${post.id}?shouldShowKeyBoard=true")
                         },
                         onShareClick = {
 
                         },
                         onPostClick = {
                             onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
-                        }
+                        },
+                        isLiked = post.isLiked
                     )
+                    Spacer(modifier = Modifier.height(25.dp))
                 }
-                item {
-                    if (pagingState.isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.BottomCenter)
-                        )
-                    }
-                }
+
+            }
+            if (pagingState.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
         }
     }
