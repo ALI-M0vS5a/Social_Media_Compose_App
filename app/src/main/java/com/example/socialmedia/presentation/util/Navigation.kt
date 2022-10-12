@@ -1,13 +1,12 @@
 package com.example.socialmedia.presentation.util
 
+import android.content.Intent
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.constraintlayout.compose.ExperimentalMotionApi
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.socialmedia.feature_auth.presentation.login.LoginScreen
 import com.example.socialmedia.feature_auth.presentation.register.RegisterScreen
 import com.example.socialmedia.feature_post.presentation.create_post.CreatePostScreen
@@ -17,10 +16,12 @@ import com.example.socialmedia.feature_profile.presentation.edit_profile.EditPro
 import com.example.socialmedia.feature_profile.presentation.profile.ProfileScreen
 import com.example.socialmedia.feature_activity.presentation.ActivityScreen
 import com.example.socialmedia.feature_profile.presentation.person_list.PersonListScreen
-import com.example.socialmedia.presentation.chat.ChatScreen
+import com.example.socialmedia.feature_chat.presentation.chat.ChatScreen
+import com.example.socialmedia.feature_chat.presentation.message.MessageScreen
 import com.example.socialmedia.presentation.onboarding.OnBoardingScreen
 import com.example.socialmedia.feature_profile.presentation.search.SearchScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
+
 
 @ExperimentalMotionApi
 @ExperimentalMaterial3Api
@@ -36,7 +37,9 @@ fun Navigation(
     ) {
         composable(route = Screen.OnBoardingScreen.route) {
             OnBoardingScreen(
-                onNavigate = navController::navigate
+                onNavigate = navController::navigate,
+                onNavigatePopBackStack = navController::popBackStack,
+                finish = finish
             )
         }
         composable(route = Screen.LoginScreen.route) {
@@ -59,7 +62,9 @@ fun Navigation(
                 }
             )
         }
-        composable(route = Screen.ChatScreen.route) {
+        composable(
+            route = Screen.ChatScreen.route
+        ) {
             ChatScreen(
                 onNavigate = navController::navigate
             )
@@ -82,7 +87,10 @@ fun Navigation(
         ) {
             ProfileScreen(
                 onNavigate = navController::navigate,
-                userId = it.arguments?.getString("userId")
+                userId = it.arguments?.getString("userId"),
+                onLogout = {
+                    navController.navigate(route = Screen.LoginScreen.route)
+                }
             )
         }
         composable(route = Screen.CreatePostScreen.route) {
@@ -91,7 +99,7 @@ fun Navigation(
             )
         }
         composable(
-            route = Screen.PostDetailScreen.route + "/{postId}?shouldShowKeyBoard={shouldShowKeyBoard}",
+            route = Screen.PostDetailScreen.route + "/{postId}?shouldShowKeyboard={shouldShowKeyboard}",
             arguments = listOf(
                 navArgument(
                     name = "postId"
@@ -103,6 +111,12 @@ fun Navigation(
                 ) {
                     type = NavType.BoolType
                     defaultValue = false
+                }
+            ),
+            deepLinks = listOf(
+                navDeepLink {
+                    action = Intent.ACTION_VIEW
+                    uriPattern = "https://montymobile.com/{postId}"
                 }
             )
         ) {
@@ -142,6 +156,14 @@ fun Navigation(
             )
         ) {
             PersonListScreen(
+                onNavigate = navController::navigate
+            )
+        }
+        composable(
+            route = Screen.MessageScreen.route
+        ) {
+            MessageScreen(
+                chatId = "",
                 onNavigate = navController::navigate
             )
         }

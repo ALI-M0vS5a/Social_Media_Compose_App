@@ -1,10 +1,9 @@
 package com.example.socialmedia.feature_post.presentation.main_feed
 
-import android.widget.Toast
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -23,15 +22,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import com.example.socialmedia.R
-import com.example.socialmedia.domain.models.Post
 import com.example.socialmedia.feature_post.presentation.util.PostEvent
 import com.example.socialmedia.presentation.components.Post
 import com.example.socialmedia.presentation.components.StandardCenteredTopBar
 import com.example.socialmedia.presentation.util.Screen
+import com.example.socialmedia.util.sendSharedPostIntent
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
@@ -116,6 +112,9 @@ fun MainFeedScreen(
                             .height(303.dp)
                             .padding(horizontal = 41.dp),
                         showProfileImage = true,
+                        onUsernameClick = {
+                            onNavigate(Screen.ProfileScreen.route + "?userId=${post.userId}")
+                        },
                         onLikeClick = {
                             viewModel.onEvents(MainFeedEvents.LikedPost(post.id))
                         },
@@ -123,12 +122,12 @@ fun MainFeedScreen(
                             onNavigate(Screen.PostDetailScreen.route + "/${post.id}?shouldShowKeyBoard=true")
                         },
                         onShareClick = {
-
+                            context.sendSharedPostIntent(post.id)
                         },
                         onPostClick = {
                             onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
                         },
-                        isLiked = post.isLiked
+                        isLiked = post.isLiked,
                     )
                     Spacer(modifier = Modifier.height(25.dp))
                 }

@@ -36,8 +36,8 @@ object ProfileModule {
 
     @Provides
     @Singleton
-    fun provideProfileRepository(profileApi: ProfileApi, gson: Gson, postApi: PostApi): ProfileRepository {
-        return ProfileRepositoryImpl(profileApi,postApi,gson)
+    fun provideProfileRepository(profileApi: ProfileApi, gson: Gson, postApi: PostApi, sharedPreferences: SharedPreferences): ProfileRepository {
+        return ProfileRepositoryImpl(profileApi,postApi,gson,sharedPreferences)
     }
 
     @Provides
@@ -50,7 +50,8 @@ object ProfileModule {
             setSkillSelected = SetSkillSelectedUseCase(),
             getPostsForProfile = GetPostsForProfileUseCase(repository),
             searchUser = SearchUserUseCase(repository),
-            toggleFollowStateForUser = ToggleFollowStateForUserUseCase(repository)
+            toggleFollowStateForUser = ToggleFollowStateForUserUseCase(repository),
+            logout = LogoutUseCase(repository)
         )
     }
 

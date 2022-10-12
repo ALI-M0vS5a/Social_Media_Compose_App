@@ -1,6 +1,7 @@
 package com.example.socialmedia.feature_auth.presentation.login
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -47,6 +48,9 @@ fun LoginScreen(
         systemUiController.setStatusBarColor(
             color = Color(android.graphics.Color.parseColor("#C1CED6"))
         )
+    }
+    BackHandler {
+        onNavigate(Screen.OnBoardingScreen.route)
     }
     LaunchedEffect(key1 = context) {
         viewModel.eventFlow.collectLatest { events ->

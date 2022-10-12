@@ -39,6 +39,7 @@ fun Post(
     onLikeClick: () -> Unit,
     onCommentClick: () -> Unit,
     onShareClick: () -> Unit,
+    onUsernameClick: () -> Unit = {},
     isLiked: Boolean = false
 
 ) {
@@ -74,7 +75,9 @@ fun Post(
                 TopPostSection(
                     modifier = Modifier
                         .padding(15.dp),
-                    post = post
+                    post = post,
+                    onUsernameClick = onUsernameClick
+
                 )
                 EngagementsButtonPostSection(
                     modifier = Modifier
@@ -95,7 +98,8 @@ fun Post(
 @Composable
 fun TopPostSection(
     modifier: Modifier = Modifier,
-    post: Post
+    post: Post,
+    onUsernameClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -104,8 +108,8 @@ fun TopPostSection(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ProfileImageAndTitle(
-            onUsernameClick = { username ->
-
+            onUsernameClick = {
+                onUsernameClick()
             },
             post = post
         )
@@ -120,7 +124,7 @@ fun TopPostSection(
 @Composable
 fun ProfileImageAndTitle(
     modifier: Modifier = Modifier,
-    onUsernameClick: (String) -> Unit = {},
+    onUsernameClick: () -> Unit = {},
     post: Post
 ) {
     Row(
@@ -165,7 +169,7 @@ fun ProfileImageAndTitle(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .clickable {
-                        onUsernameClick("")
+                        onUsernameClick()
                     }
             )
             Spacer(modifier = Modifier.height(1.dp))

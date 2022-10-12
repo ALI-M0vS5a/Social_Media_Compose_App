@@ -1,5 +1,6 @@
 package com.example.socialmedia.presentation.onboarding
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -36,10 +37,17 @@ import kotlinx.coroutines.launch
 @ExperimentalPagerApi
 @Composable
 fun OnBoardingScreen(
-    onNavigate: (String) -> Unit = {}
+    onNavigate: (String) -> Unit = {},
+    onNavigatePopBackStack: () -> Unit = {},
+    finish: () -> Unit,
+
 ) {
     val state = rememberPagerState()
     val systemUiController: SystemUiController = rememberSystemUiController()
+
+    BackHandler {
+        finish()
+    }
     LaunchedEffect(key1 = true){
         systemUiController.setStatusBarColor(
             color = Color(android.graphics.Color.parseColor("#C1CED6"))

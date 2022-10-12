@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.socialmedia.feature_auth.domain.use_case.AuthenticateUseCase
 import com.example.socialmedia.presentation.util.Screen
 import com.example.socialmedia.util.Resource
+import com.example.socialmedia.util.UiEvent
 import com.example.socialmedia.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -35,23 +36,16 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when(authenticateUseCase()) {
                 is Resource.Success -> {
-                    println("Success")
                     _eventFlow.emit(
                         UiEvent.Navigate(Screen.MainFeedScreen.route)
                     )
                 }
                 is Resource.Error -> {
-                    println("Error")
                     _eventFlow.emit(
                         UiEvent.Message(UiText.StringResource(R.string.not_authenticated))
                     )
                 }
             }
         }
-    }
-
-    sealed class UiEvent {
-        data class Message(val uiText: UiText): UiEvent()
-        data class Navigate(val route: String): UiEvent()
     }
 }

@@ -93,4 +93,9 @@
     <string name="send_comment">Send comment</string>
     <string name="comment_posted">Successfully posted comment</string>
     <string name="person_list_title_top_bar">Liked by</string>
+    <string name="logout">Logout</string>
+    <string name="do_you_want_to_logout">Log out of \n SocialMedia? </string>
+    <string name="Cancel">Cancel</string>
+    <string name="share_intent_text">Hey, I found a great post, check it out :)\n%s</string>
+    <string name="enter_message">Message</string>
 </resources>

@@ -44,6 +44,7 @@ import com.example.socialmedia.feature_post.presentation.util.showKeyBoard
 import com.example.socialmedia.presentation.components.StandardTopBar
 import com.example.socialmedia.presentation.util.Screen
 import com.example.socialmedia.util.UiEvent
+import com.example.socialmedia.util.sendSharedPostIntent
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -124,7 +125,7 @@ fun PostDetailScreen(
                             }
                         }
                         IconButton(onClick = {
-
+                            context.sendSharedPostIntent(viewModel.uiState.value.post?.id ?: "")
                         }) {
                             Icon(
                                 imageVector = Icons.Outlined.FileUpload,
@@ -158,7 +159,10 @@ fun PostDetailScreen(
                         TopPostSection(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 12.dp)
+                                .padding(start = 12.dp),
+                            onUserNameClick = {
+                                onNavigate(Screen.ProfileScreen.route + "?userId=${state.post?.userId}")
+                            }
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                         Box(
@@ -220,8 +224,6 @@ fun PostDetailScreen(
                     )
                 }
             }
-
-
         }
         Row(
             modifier = Modifier
@@ -316,7 +318,8 @@ fun PostDetailScreen(
 @Composable
 fun TopPostSection(
     modifier: Modifier = Modifier,
-    viewModel: PostDetailViewModel = hiltViewModel()
+    viewModel: PostDetailViewModel = hiltViewModel(),
+    onUserNameClick: () -> Unit = {}
 ) {
     val state = viewModel.uiState.value
     Row(
@@ -357,7 +360,9 @@ fun TopPostSection(
                 fontWeight = FontWeight(400),
                 fontSize = 16.sp,
                 color = Color(android.graphics.Color.parseColor("#242424")),
-                lineHeight = 24.sp
+                lineHeight = 24.sp,
+                modifier = Modifier
+                    .clickable { onUserNameClick() }
             )
         }
     }

@@ -5,7 +5,6 @@ import android.graphics.Color
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +13,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,7 +31,6 @@ import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.compose.layoutId
-import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.socialmedia.R
@@ -46,6 +45,7 @@ fun MotionLayoutProfileHeader(
     onNavigatePopBackStack: () -> Unit = {},
     user: User,
     isOwnProfile: Boolean,
+    onLogoutClick: () -> Unit = {},
     progress: Float
 ) {
     val context = LocalContext.current
@@ -79,8 +79,20 @@ fun MotionLayoutProfileHeader(
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
-                contentDescription = null
+                contentDescription = stringResource(id = R.string.arrow_back)
             )
+        }
+        if(isOwnProfile) {
+            IconButton(
+                onClick = onLogoutClick,
+                modifier = Modifier
+                    .layoutId("logout")
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Logout,
+                    contentDescription = stringResource(id = R.string.logout)
+                )
+            }
         }
         Image(
             painter = rememberAsyncImagePainter(

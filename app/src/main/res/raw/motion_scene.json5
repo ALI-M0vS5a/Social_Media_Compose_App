@@ -7,6 +7,12 @@
         start: ['parent', 'start', 16],
         top: ['parent', 'top', 24]
       },
+      logout: {
+        width: 24,
+        height: 24,
+        end: ['parent', 'end', 16],
+        top: ['parent', 'top', 24]
+      },
       profile_pic: {
         width: 95,
         height: 95,
@@ -36,6 +42,12 @@
         width: 24,
         height: 24,
         start: ['parent', 'start', 16],
+        top: ['parent', 'top', 24]
+      },
+      logout: {
+        width: 24,
+        height: 24,
+        end: ['parent', 'end', 16],
         top: ['parent', 'top', 24]
       },
       profile_pic: {
