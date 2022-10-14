@@ -1,4 +1,4 @@
-package com.example.socialmedia.feature_chat.components
+package com.example.socialmedia.feature_chat.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

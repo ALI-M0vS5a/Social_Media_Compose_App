@@ -7,7 +7,7 @@
         start: ['parent', 'start', 16],
         top: ['parent', 'top', 24]
       },
-      logout: {
+      logoutOrChat: {
         width: 24,
         height: 24,
         end: ['parent', 'end', 16],
@@ -44,7 +44,7 @@
         start: ['parent', 'start', 16],
         top: ['parent', 'top', 24]
       },
-      logout: {
+      logoutOrChat: {
         width: 24,
         height: 24,
         end: ['parent', 'end', 16],

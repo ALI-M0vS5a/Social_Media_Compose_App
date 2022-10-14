@@ -1,4 +1,4 @@
-package com.example.socialmedia.feature_chat.data.remote.ws.data
+package com.example.socialmedia.feature_chat.data.remote.data
 
 import com.example.socialmedia.feature_chat.domain.model.Message
 import java.text.DateFormat
@@ -17,7 +17,7 @@ data class WsServerMessage(
             fromId = fromId,
             toId = toId,
             text = text,
-            FormattedTime = DateFormat
+            formattedTime = DateFormat
                 .getDateInstance(DateFormat.DEFAULT)
                 .format(Date(timestamp)),
             chatId = chatId

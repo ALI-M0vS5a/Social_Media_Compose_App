@@ -1,4 +1,4 @@
-package com.example.socialmedia.feature_chat.components
+package com.example.socialmedia.feature_chat.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -56,7 +56,7 @@ fun ChatItem(
             Image(
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(context)
-                        .data(item.remoteUserProfileUser)
+                        .data(item.remoteUserProfilePictureUrl)
                         .crossfade(true)
                         .build()
                 ),
@@ -85,7 +85,7 @@ fun ChatItem(
                         modifier = Modifier.weight(1f)
                     )
                     Text(
-                        text = item.lastMessageFormattedTime,
+                        text = item.timestamp.toString(),
                         textAlign = TextAlign.End
                     )
                 }

@@ -1,4 +1,4 @@
-package com.example.socialmedia.feature_chat.components
+package com.example.socialmedia.feature_chat.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun OwnMessage(
+fun RemoteMessage(
     modifier: Modifier = Modifier,
     message: String,
     formattedTime: String,
@@ -24,19 +24,13 @@ fun OwnMessage(
     triangleWidth: Dp = 30.dp,
     triangleHeight: Dp = 30.dp
 ) {
-    val cornerRadius = MaterialTheme.shapes.medium.bottomEnd
+    val cornerRadius = MaterialTheme.shapes.medium.bottomStart
     Row(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = formattedTime,
-            color = Color.LightGray,
-            modifier = Modifier.align(Alignment.Bottom)
-        )
-        Spacer(modifier = Modifier.width(10.dp))
         Box(
             modifier = Modifier
                 .weight(1f)
                 .background(
-                    color = color,
+                    color = Color.LightGray,
                     shape = RoundedCornerShape(10.dp)
                 )
                 .padding(12.dp)
@@ -47,19 +41,19 @@ fun OwnMessage(
                     )
                     val path = Path().apply {
                         moveTo(
-                            size.width,
+                            0f,
                             size.height - cornerRadiusPx
                         )
-                        lineTo(size.width, size.height + triangleHeight.toPx())
+                        lineTo(0f, size.height + triangleHeight.toPx())
                         lineTo(
-                            size.width - triangleWidth.toPx(),
+                            triangleWidth.toPx(),
                             size.height - cornerRadiusPx
                         )
                         close()
                     }
                     drawPath(
                         path = path,
-                        color = color
+                        color = Color.LightGray
                     )
                 }
         ) {
@@ -67,5 +61,11 @@ fun OwnMessage(
                 text = message
             )
         }
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(
+            text = formattedTime,
+            color = Color.LightGray,
+            modifier = Modifier.align(Alignment.Bottom)
+        )
     }
 }

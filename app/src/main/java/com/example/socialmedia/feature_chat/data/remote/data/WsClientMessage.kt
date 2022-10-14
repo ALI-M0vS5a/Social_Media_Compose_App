@@ -1,4 +1,4 @@
-package com.example.socialmedia.feature_chat.data.remote.ws.data
+package com.example.socialmedia.feature_chat.data.remote.data
 
 
 

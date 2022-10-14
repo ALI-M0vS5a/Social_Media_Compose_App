@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,47 +21,25 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.socialmedia.R
-import com.example.socialmedia.feature_chat.components.OwnMessage
-import com.example.socialmedia.feature_chat.components.RemoteMessage
-import com.example.socialmedia.feature_chat.components.SendTextField
-import com.example.socialmedia.feature_chat.domain.model.Message
+import com.example.socialmedia.feature_chat.presentation.components.OwnMessage
+import com.example.socialmedia.feature_chat.presentation.components.RemoteMessage
+import com.example.socialmedia.feature_chat.presentation.components.SendTextField
 import com.example.socialmedia.presentation.components.StandardTopBar
+import okio.ByteString.Companion.decodeBase64
+import java.nio.charset.Charset
 
 @Composable
 fun MessageScreen(
-    chatId: String,
+    remoteUsername: String,
+    encodedRemoteUserProfilePictureUrl: String,
     onNavigateUp: () -> Unit = {},
     onNavigate: (String) -> Unit,
     viewModel: MessageScreenViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val messages = remember {
-        listOf(
-            Message(
-                fromId = "",
-                toId = "",
-                text = "Hey, How's it going?",
-                FormattedTime = "19:39",
-                chatId = "",
-                id = ""
-            ),
-            Message(
-                fromId = "",
-                toId = "",
-                text = "Hey, How's it going?",
-                FormattedTime = "19:39",
-                chatId = "",
-                id = ""
-            ),
-            Message(
-                fromId = "",
-                toId = "",
-                text = "Hey, How's it going?",
-                FormattedTime = "19:39",
-                chatId = "",
-                id = ""
-            )
-        )
+    val pagingState = viewModel.pagingState.value
+    val decodedRemoteUserProfilePictureUrl = remember {
+        encodedRemoteUserProfilePictureUrl.decodeBase64()?.string(Charset.defaultCharset())
     }
     Box(
         modifier = Modifier.fillMaxSize()
@@ -83,7 +60,7 @@ fun MessageScreen(
                     Image(
                         painter = rememberAsyncImagePainter(
                             model = ImageRequest.Builder(context)
-                                .data("http://192.168.0.105:8081/profile_pictures/bb4c7b5b-0e3b-4b50-8509-21b2457f0530.png")
+                                .data(decodedRemoteUserProfilePictureUrl)
                                 .crossfade(true)
                                 .build()
                         ),
@@ -95,7 +72,7 @@ fun MessageScreen(
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
-                        text = "Selena Gomez",
+                        text = remoteUsername,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold
                     )
@@ -106,15 +83,19 @@ fun MessageScreen(
                     modifier = Modifier.weight(1f),
                     contentPadding = PaddingValues(10.dp)
                 ) {
-                    items(messages) { message ->
+                    items(pagingState.items.size) { i ->
+                        val message = pagingState.items[i]
+                        if(i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
+                            viewModel.loadNextMessages()
+                        }
                         RemoteMessage(
                             message = message.text,
-                            formattedTime = message.FormattedTime
+                            formattedTime = message.formattedTime
                         )
                         Spacer(modifier = Modifier.height(25.dp))
                         OwnMessage(
                             message = message.text,
-                            formattedTime = message.FormattedTime
+                            formattedTime = message.formattedTime
                         )
                         Spacer(modifier = Modifier.height(25.dp))
                     }

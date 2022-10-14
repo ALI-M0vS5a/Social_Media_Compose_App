@@ -1,5 +1,6 @@
 package com.example.socialmedia.feature_profile.presentation.profile
 
+import android.util.Base64
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
@@ -98,6 +99,16 @@ fun ProfileScreen(
                     onNavigate = onNavigate,
                     onLogoutClick = {
                         viewModel.onEvent(ProfileEvent.ShowLogoutDialog)
+                    },
+                    onChatClick = {
+                        onNavigate(
+                            Screen.MessageScreen.route + "/${profile.userId}/${profile.username}/${
+                                Base64.encodeToString(
+                                    profile.profilePictureUrl.encodeToByteArray(),
+                                    0
+                                )
+                            }"
+                        )
                     }
                 )
                 LazyVerticalGrid(

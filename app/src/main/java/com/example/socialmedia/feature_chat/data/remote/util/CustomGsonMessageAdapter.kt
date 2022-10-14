@@ -1,7 +1,7 @@
-package com.example.socialmedia.feature_chat.data.remote.ws.util
+package com.example.socialmedia.feature_chat.data.remote.util
 
-import com.example.socialmedia.feature_chat.data.remote.ws.data.WsClientMessage
-import com.example.socialmedia.feature_chat.data.remote.ws.data.WsServerMessage
+import com.example.socialmedia.feature_chat.data.remote.data.WsClientMessage
+import com.example.socialmedia.feature_chat.data.remote.data.WsServerMessage
 import com.google.gson.Gson
 import com.tinder.scarlet.Message
 import com.tinder.scarlet.MessageAdapter

@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
@@ -46,7 +47,8 @@ fun MotionLayoutProfileHeader(
     user: User,
     isOwnProfile: Boolean,
     onLogoutClick: () -> Unit = {},
-    progress: Float
+    progress: Float,
+    onChatClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val motionScene = remember {
@@ -86,11 +88,22 @@ fun MotionLayoutProfileHeader(
             IconButton(
                 onClick = onLogoutClick,
                 modifier = Modifier
-                    .layoutId("logout")
+                    .layoutId("logoutOrChat")
             ) {
                 Icon(
                     imageVector = Icons.Default.Logout,
                     contentDescription = stringResource(id = R.string.logout)
+                )
+            }
+        } else {
+            IconButton(
+                onClick = onChatClick,
+                modifier = Modifier
+                    .layoutId("logoutOrChat")
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Chat,
+                    contentDescription = stringResource(id = R.string.chat)
                 )
             }
         }
