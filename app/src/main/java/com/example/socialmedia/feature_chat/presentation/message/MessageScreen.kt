@@ -1,19 +1,24 @@
 package com.example.socialmedia.feature_chat.presentation.message
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,6 +33,7 @@ import com.example.socialmedia.presentation.components.StandardTopBar
 import okio.ByteString.Companion.decodeBase64
 import java.nio.charset.Charset
 
+@ExperimentalComposeUiApi
 @Composable
 fun MessageScreen(
     remoteUserId: String,
@@ -42,8 +48,29 @@ fun MessageScreen(
     val decodedRemoteUserProfilePictureUrl = remember {
         encodedRemoteUserProfilePictureUrl.decodeBase64()?.string(Charset.defaultCharset())
     }
+    val lazyListState = rememberLazyListState()
+    val keyboardController = LocalSoftwareKeyboardController.current
+    LaunchedEffect(key1 = pagingState) {
+        viewModel.messageReceived.collect { event ->
+            when (event) {
+                is MessageScreenViewModel.MessageUpdateEvent.SingleMessageUpdate -> {
+                    lazyListState.animateScrollToItem(pagingState.items.size - 1)
+                }
+                is MessageScreenViewModel.MessageUpdateEvent.MessagePageLoaded -> {
+                    if(pagingState.items.isEmpty()) {
+                        return@collect
+                    }
+                    lazyListState.animateScrollToItem(pagingState.items.size - 1)
+                }
+                is MessageScreenViewModel.MessageUpdateEvent.MessageSent -> {
+                    keyboardController?.hide()
+                }
+            }
+        }
+    }
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(
                 color = Color(android.graphics.Color.parseColor("#EDF6F9"))
             )
@@ -87,14 +114,15 @@ fun MessageScreen(
                         start = 10.dp,
                         top = 10.dp,
                         end = 10.dp
-                    )
+                    ),
+                    state = lazyListState
                 ) {
                     items(pagingState.items.size) { i ->
                         val message = pagingState.items[i]
-                        if(i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
+                        if (i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
                             viewModel.loadNextMessages()
                         }
-                        if(message.fromId == remoteUserId) {
+                        if (message.fromId == remoteUserId) {
                             RemoteMessage(
                                 message = message.text,
                                 formattedTime = message.formattedTime

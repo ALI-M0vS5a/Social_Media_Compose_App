@@ -39,6 +39,9 @@ class MessageScreenViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    private val _messageUpdatedEvent = MutableSharedFlow<MessageUpdateEvent>(replay = 1)
+    val messageReceived = _messageUpdatedEvent.asSharedFlow()
+
     private val paging = DefaultPaging(
         onLoadUpdated = { isLoading ->
             _pagingState.value = pagingState.value.copy(isLoading = isLoading)
@@ -59,6 +62,9 @@ class MessageScreenViewModel @Inject constructor(
                endReached = messages.isEmpty(),
                isLoading = false
            )
+            viewModelScope.launch {
+                _messageUpdatedEvent.emit(MessageUpdateEvent.MessagePageLoaded)
+            }
         }
     )
 
@@ -89,6 +95,7 @@ class MessageScreenViewModel @Inject constructor(
                 _pagingState.value = pagingState.value.copy(
                     items = pagingState.value.items + message
                 )
+                _messageUpdatedEvent.emit(MessageUpdateEvent.SingleMessageUpdate)
             }.launchIn(viewModelScope)
     }
     private fun observeChatEvents() {
@@ -112,6 +119,10 @@ class MessageScreenViewModel @Inject constructor(
         }
         val chatId = savedStateHandle.get<String>("chatId") ?: return
         chatUseCases.sendMessage(toId, messageTextFieldState.value.text, chatId)
+        _messageTextFieldState.value = StandardTextFieldState()
+        viewModelScope.launch {
+            _messageUpdatedEvent.emit(MessageUpdateEvent.MessageSent)
+        }
     }
 
     fun loadNextMessages() {
@@ -119,4 +130,11 @@ class MessageScreenViewModel @Inject constructor(
             paging.loadNextItems()
         }
     }
+
+    sealed class MessageUpdateEvent {
+        object SingleMessageUpdate: MessageUpdateEvent()
+        object MessagePageLoaded: MessageUpdateEvent()
+        object MessageSent: MessageUpdateEvent()
+    }
+
 }
