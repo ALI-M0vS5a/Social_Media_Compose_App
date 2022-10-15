@@ -1,13 +1,15 @@
 package com.example.socialmedia.feature_chat.data.remote.data
 
 import com.example.socialmedia.feature_chat.domain.model.Message
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 data class MessageDto(
     val fromId: String,
     val toId: String,
     val text: String,
-    val timestamp: String,
+    val timestamp: Long,
     val chatId: String?,
     val id: String
 ) {
@@ -16,7 +18,9 @@ data class MessageDto(
             fromId = fromId,
             toId = toId,
             text = text,
-            formattedTime = timestamp,
+            formattedTime = SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault()).run {
+                format(timestamp)
+            },
             chatId = chatId
         )
     }

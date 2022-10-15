@@ -30,6 +30,7 @@ import java.nio.charset.Charset
 
 @Composable
 fun MessageScreen(
+    remoteUserId: String,
     remoteUsername: String,
     encodedRemoteUserProfilePictureUrl: String,
     onNavigateUp: () -> Unit = {},
@@ -81,23 +82,31 @@ fun MessageScreen(
             Column(modifier = Modifier.weight(1f)) {
                 LazyColumn(
                     modifier = Modifier.weight(1f),
-                    contentPadding = PaddingValues(10.dp)
+                    contentPadding = PaddingValues(
+                        bottom = 100.dp,
+                        start = 10.dp,
+                        top = 10.dp,
+                        end = 10.dp
+                    )
                 ) {
                     items(pagingState.items.size) { i ->
                         val message = pagingState.items[i]
                         if(i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
                             viewModel.loadNextMessages()
                         }
-                        RemoteMessage(
-                            message = message.text,
-                            formattedTime = message.formattedTime
-                        )
-                        Spacer(modifier = Modifier.height(25.dp))
-                        OwnMessage(
-                            message = message.text,
-                            formattedTime = message.formattedTime
-                        )
-                        Spacer(modifier = Modifier.height(25.dp))
+                        if(message.fromId == remoteUserId) {
+                            RemoteMessage(
+                                message = message.text,
+                                formattedTime = message.formattedTime
+                            )
+                            Spacer(modifier = Modifier.height(25.dp))
+                        } else {
+                            OwnMessage(
+                                message = message.text,
+                                formattedTime = message.formattedTime
+                            )
+                            Spacer(modifier = Modifier.height(25.dp))
+                        }
                     }
                 }
             }

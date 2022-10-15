@@ -16,12 +16,14 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 @HiltViewModel
 class MessageScreenViewModel @Inject constructor(
     private val chatUseCases: ChatUseCases,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val client: OkHttpClient
 ) : ViewModel() {
 
     private val _messageTextFieldState = mutableStateOf(StandardTextFieldState())
@@ -61,8 +63,10 @@ class MessageScreenViewModel @Inject constructor(
     )
 
     init {
+        chatUseCases.initializeRepository()
         loadNextMessages()
         observeChatEvents()
+        observeChatMessages()
     }
 
     fun onEvent(event: MessageEvent) {
@@ -82,8 +86,8 @@ class MessageScreenViewModel @Inject constructor(
     private fun observeChatMessages() {
         chatUseCases.observeMessages()
             .onEach { message ->
-                _uiState.value = uiState.value.copy(
-                    messages = uiState.value.messages + message
+                _pagingState.value = pagingState.value.copy(
+                    items = pagingState.value.items + message
                 )
             }.launchIn(viewModelScope)
     }
@@ -93,7 +97,6 @@ class MessageScreenViewModel @Inject constructor(
                 when(event) {
                     is WebSocket.Event.OnConnectionOpened<*> -> {
                         println("Connection was opened")
-                        observeChatMessages()
                     }
                     is WebSocket.Event.OnConnectionFailed -> {
                         println("Connection was failed: ${event.throwable}")

@@ -1,6 +1,8 @@
 package com.example.socialmedia.feature_chat.data.remote.data
 
 import com.example.socialmedia.feature_chat.domain.model.Chat
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 data class ChatDto(
@@ -18,7 +20,9 @@ data class ChatDto(
             remoteUsername = remoteUsername ?: return null,
             remoteUserProfilePictureUrl = remoteUserProfilePictureUrl ?: return null,
             lastMessage = lastMessage ?: return null,
-            timestamp = timestamp ?: return null
+            timestamp = SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault()).run {
+                format(timestamp)
+            },
         )
     }
 }

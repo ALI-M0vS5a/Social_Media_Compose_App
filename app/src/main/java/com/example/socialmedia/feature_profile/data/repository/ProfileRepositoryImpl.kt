@@ -160,6 +160,8 @@ class ProfileRepositoryImpl(
     override fun logout() {
         sharedPreferences.edit()
             .remove(Constants.KEY_JWT_TOKEN)
+            .remove(Constants.KEY_USER_ID)
+            .clear()
             .apply()
     }
 
